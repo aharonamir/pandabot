@@ -150,7 +150,7 @@ class Pandabot_Widget {
 						data-pandabot="input"
 						autocomplete="off"
 						maxlength="<?php echo esc_attr( (int) $settings['input_char_cap'] ); ?>"
-						placeholder="<?php esc_attr_e( 'כתבו הודעה…', 'pandabot' ); ?>"
+						placeholder="<?php esc_attr_e( 'כתבו שאלה…', 'pandabot' ); ?>"
 						aria-label="<?php esc_attr_e( 'הקלדת הודעה', 'pandabot' ); ?>">
 					<button type="submit" class="pandabot-send" aria-label="<?php esc_attr_e( 'שליחה', 'pandabot' ); ?>">
 						<?php echo self::icon( 'send' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?>
