@@ -1,0 +1,11 @@
+# Build artifact — rebuild with:
+#   zip -rq pandabot.zip pandabot -x "*.DS_Store"
+# Distributed as a GitHub Release attachment rather than tracked here.
+pandabot.zip
+
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/

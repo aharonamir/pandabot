@@ -1,0 +1,705 @@
+/**
+ * PandaBot widget styles.
+ *
+ * Every rule is scoped under #pandabot-root so the widget can neither leak
+ * into the theme nor inherit surprises from it (plan §5). The only thing it
+ * deliberately inherits is font-family — that's what makes it feel native,
+ * and it avoids loading any external font.
+ *
+ * Palette derives from the single --pandabot-accent set inline by PHP from
+ * the appearance setting. color-mix does that derivation where supported;
+ * the static values above it are the fallback for older browsers.
+ */
+
+#pandabot-root {
+	--pandabot-accent: #0F6E56;
+	--pandabot-accent-dark: #085041;
+	--pandabot-tint: #E1F5EE;
+	--pandabot-soft: #9FE1CB;
+	--pandabot-radius: 20px;
+	--pandabot-offset-bottom: 26px;
+	--pandabot-offset-side: 26px;
+	--pandabot-mobile-gap: 0px;
+	--pandabot-ink: #2C2C2A;
+	--pandabot-muted: #7C8A85;
+	--pandabot-line: rgba(20, 40, 35, .14);
+	--pandabot-surface: #fff;
+	--pandabot-body-bg: #FAFBFA;
+	--pandabot-amber-bg: #FAEEDA;
+	--pandabot-amber-bd: #FAC775;
+	--pandabot-amber-tx: #633806;
+	--pandabot-shadow-sm: 0 1px 3px rgba(4, 52, 44, .08), 0 1px 2px rgba(4, 52, 44, .05);
+	--pandabot-shadow-md: 0 8px 30px rgba(4, 52, 44, .14), 0 2px 8px rgba(4, 52, 44, .08);
+	--pandabot-shadow-lg: 0 18px 50px rgba(4, 52, 44, .2);
+
+	font-family: inherit;
+	direction: rtl;
+	text-align: start;
+	line-height: 1.6;
+	color: var(--pandabot-ink);
+}
+
+@supports (background: color-mix(in srgb, red 50%, white)) {
+	#pandabot-root {
+		--pandabot-accent-dark: color-mix(in srgb, var(--pandabot-accent) 82%, #000);
+		--pandabot-tint: color-mix(in srgb, var(--pandabot-accent) 12%, #fff);
+		--pandabot-soft: color-mix(in srgb, var(--pandabot-accent) 42%, #fff);
+	}
+}
+
+#pandabot-root *,
+#pandabot-root *::before,
+#pandabot-root *::after {
+	box-sizing: border-box;
+}
+
+#pandabot-root [hidden] {
+	display: none !important;
+}
+
+#pandabot-root .pandabot-icon {
+	width: 1.25em;
+	height: 1.25em;
+	flex-shrink: 0;
+}
+
+/* ---------- Launcher ---------- */
+
+#pandabot-root .pandabot-launcher {
+	position: fixed;
+	bottom: var(--pandabot-offset-bottom);
+	z-index: 99998;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-direction: row-reverse;
+}
+
+#pandabot-root.pandabot--left .pandabot-launcher {
+	left: var(--pandabot-offset-side);
+}
+
+#pandabot-root.pandabot--right .pandabot-launcher {
+	right: var(--pandabot-offset-side);
+	flex-direction: row;
+}
+
+#pandabot-root .pandabot-launcher-btn {
+	width: 64px;
+	height: 64px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: var(--pandabot-accent);
+	color: #fff;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: var(--pandabot-shadow-md);
+	position: relative;
+	transition: transform .18s ease, background .18s ease;
+}
+
+#pandabot-root .pandabot-launcher-btn:hover {
+	transform: scale(1.06);
+	background: var(--pandabot-accent-dark);
+}
+
+#pandabot-root .pandabot-launcher-btn .pandabot-icon {
+	width: 30px;
+	height: 30px;
+}
+
+#pandabot-root .pandabot-badge {
+	position: absolute;
+	top: -2px;
+	inset-inline-end: -2px;
+	width: 18px;
+	height: 18px;
+	background: #D85A30;
+	border: 2.5px solid #fff;
+	border-radius: 50%;
+	color: #fff;
+	font-size: 10px;
+	font-weight: 700;
+	line-height: 13px;
+	text-align: center;
+}
+
+#pandabot-root .pandabot-teaser {
+	display: flex;
+	align-items: flex-start;
+	gap: 4px;
+	background: var(--pandabot-surface);
+	border: 1px solid var(--pandabot-line);
+	border-radius: 16px 16px 4px 16px;
+	padding: 9px 13px;
+	box-shadow: var(--pandabot-shadow-sm);
+	max-width: 220px;
+	animation: pandabot-pop .3s ease;
+}
+
+#pandabot-root .pandabot-teaser-text {
+	border: none;
+	background: none;
+	padding: 0;
+	font: inherit;
+	font-size: 13.5px;
+	line-height: 1.45;
+	color: var(--pandabot-accent-dark);
+	cursor: pointer;
+	text-align: start;
+}
+
+#pandabot-root .pandabot-teaser-close {
+	border: none;
+	background: none;
+	padding: 0;
+	color: var(--pandabot-muted);
+	cursor: pointer;
+	display: flex;
+	flex-shrink: 0;
+}
+
+#pandabot-root .pandabot-teaser-close .pandabot-icon {
+	width: 14px;
+	height: 14px;
+}
+
+#pandabot-root.pandabot--right .pandabot-teaser {
+	border-radius: 16px 16px 16px 4px;
+}
+
+/* ---------- Panel ---------- */
+
+#pandabot-root .pandabot-panel {
+	position: fixed;
+	bottom: var(--pandabot-offset-bottom);
+	z-index: 99999;
+	width: 370px;
+	max-width: calc(100vw - 32px);
+	height: 600px;
+	max-height: calc(100vh - 60px);
+	background: var(--pandabot-surface);
+	border: 1px solid var(--pandabot-line);
+	border-radius: var(--pandabot-radius);
+	box-shadow: var(--pandabot-shadow-lg);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	animation: pandabot-rise .26s cubic-bezier(.2, .8, .2, 1);
+}
+
+#pandabot-root.pandabot--left .pandabot-panel {
+	left: var(--pandabot-offset-side);
+	transform-origin: bottom left;
+}
+
+#pandabot-root.pandabot--right .pandabot-panel {
+	right: var(--pandabot-offset-side);
+	transform-origin: bottom right;
+}
+
+#pandabot-root .pandabot-head {
+	background: var(--pandabot-accent);
+	padding: 15px 16px;
+	display: flex;
+	align-items: center;
+	gap: 11px;
+	color: #fff;
+}
+
+#pandabot-root .pandabot-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: var(--pandabot-tint);
+	color: var(--pandabot-accent);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	overflow: hidden;
+}
+
+#pandabot-root .pandabot-avatar img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+#pandabot-root .pandabot-avatar .pandabot-icon {
+	width: 22px;
+	height: 22px;
+}
+
+#pandabot-root .pandabot-head-text {
+	flex: 1;
+	min-width: 0;
+}
+
+#pandabot-root .pandabot-head-text b {
+	font-size: 15.5px;
+	font-weight: 600;
+	display: block;
+	color: #fff;
+}
+
+#pandabot-root .pandabot-head-text span {
+	font-size: 12px;
+	color: var(--pandabot-soft);
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+#pandabot-root .pandabot-head-text span::before {
+	content: "";
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #7CE0BB;
+	display: inline-block;
+}
+
+#pandabot-root .pandabot-close {
+	background: none;
+	border: none;
+	color: var(--pandabot-soft);
+	cursor: pointer;
+	display: flex;
+	padding: 4px;
+	border-radius: 8px;
+}
+
+#pandabot-root .pandabot-close:hover {
+	background: rgba(255, 255, 255, .12);
+	color: #fff;
+}
+
+#pandabot-root .pandabot-close .pandabot-icon {
+	width: 22px;
+	height: 22px;
+}
+
+/* ---------- Messages ---------- */
+
+#pandabot-root .pandabot-body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 16px 14px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	background: var(--pandabot-body-bg);
+	scroll-behavior: smooth;
+	overscroll-behavior: contain;
+}
+
+#pandabot-root .pandabot-body::-webkit-scrollbar {
+	width: 6px;
+}
+
+#pandabot-root .pandabot-body::-webkit-scrollbar-thumb {
+	background: var(--pandabot-soft);
+	border-radius: 6px;
+}
+
+#pandabot-root .pandabot-msg {
+	max-width: 86%;
+	font-size: 14px;
+	line-height: 1.62;
+	animation: pandabot-fade .3s ease;
+}
+
+#pandabot-root .pandabot-msg--bot {
+	align-self: flex-start;
+}
+
+#pandabot-root .pandabot-msg--user {
+	align-self: flex-end;
+}
+
+#pandabot-root .pandabot-bubble {
+	background: var(--pandabot-surface);
+	border: 1px solid var(--pandabot-line);
+	color: var(--pandabot-ink);
+	padding: 11px 14px;
+	border-radius: 16px 16px 16px 5px;
+	overflow-wrap: anywhere;
+}
+
+#pandabot-root .pandabot-msg--greet .pandabot-bubble {
+	background: var(--pandabot-tint);
+	border-color: transparent;
+	color: var(--pandabot-accent-dark);
+}
+
+#pandabot-root .pandabot-msg--user .pandabot-bubble {
+	background: var(--pandabot-accent);
+	border-color: transparent;
+	color: #fff;
+	border-radius: 16px 16px 5px 16px;
+}
+
+#pandabot-root .pandabot-msg--guard .pandabot-bubble {
+	background: var(--pandabot-amber-bg);
+	border-color: var(--pandabot-amber-bd);
+	color: var(--pandabot-amber-tx);
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+}
+
+#pandabot-root .pandabot-msg--guard .pandabot-icon {
+	width: 17px;
+	height: 17px;
+	margin-top: 3px;
+}
+
+#pandabot-root .pandabot-msg--error .pandabot-bubble {
+	background: #FAECE7;
+	border-color: #F0997B;
+	color: #712B13;
+}
+
+/* ---------- Chips / CTAs ---------- */
+
+#pandabot-root .pandabot-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 7px;
+	align-self: flex-start;
+	max-width: 94%;
+}
+
+#pandabot-root .pandabot-chip {
+	border: 1px solid var(--pandabot-soft);
+	color: var(--pandabot-accent);
+	background: var(--pandabot-surface);
+	font: inherit;
+	font-size: 12.5px;
+	padding: 6px 13px;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: background .15s, transform .1s;
+}
+
+#pandabot-root .pandabot-chip:hover {
+	background: var(--pandabot-tint);
+}
+
+#pandabot-root .pandabot-chip:active {
+	transform: scale(.96);
+}
+
+#pandabot-root .pandabot-cta {
+	align-self: flex-start;
+	max-width: 88%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	animation: pandabot-fade .3s ease;
+}
+
+#pandabot-root .pandabot-cta-primary,
+#pandabot-root .pandabot-cta-sec {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	border-radius: 13px;
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+#pandabot-root .pandabot-cta-primary {
+	background: var(--pandabot-accent);
+	color: #fff;
+	padding: 12px;
+	font-weight: 600;
+}
+
+#pandabot-root .pandabot-cta-primary:hover {
+	background: var(--pandabot-accent-dark);
+	color: #fff;
+}
+
+#pandabot-root .pandabot-cta-row {
+	display: flex;
+	gap: 8px;
+}
+
+#pandabot-root .pandabot-cta-sec {
+	flex: 1;
+	border: 1px solid var(--pandabot-soft);
+	color: var(--pandabot-accent);
+	padding: 10px;
+	font-size: 13px;
+}
+
+#pandabot-root .pandabot-cta-sec:hover {
+	background: var(--pandabot-tint);
+	color: var(--pandabot-accent);
+}
+
+/* ---------- Typing ---------- */
+
+#pandabot-root .pandabot-typing {
+	align-self: flex-start;
+	background: var(--pandabot-surface);
+	border: 1px solid var(--pandabot-line);
+	padding: 13px 16px;
+	border-radius: 16px 16px 16px 5px;
+	display: flex;
+	gap: 5px;
+}
+
+#pandabot-root .pandabot-typing span {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--pandabot-soft);
+	animation: pandabot-blink 1.2s infinite;
+}
+
+#pandabot-root .pandabot-typing span:nth-child(2) {
+	animation-delay: .2s;
+}
+
+#pandabot-root .pandabot-typing span:nth-child(3) {
+	animation-delay: .4s;
+}
+
+/* ---------- Footer ---------- */
+
+#pandabot-root .pandabot-consent {
+	margin: 0;
+	font-size: 10.5px;
+	line-height: 1.5;
+	color: var(--pandabot-muted);
+	text-align: center;
+	padding: 8px 12px 0;
+	background: var(--pandabot-surface);
+}
+
+#pandabot-root .pandabot-consent a {
+	color: var(--pandabot-accent);
+}
+
+#pandabot-root .pandabot-foot {
+	padding: 11px 12px;
+	border-top: 1px solid var(--pandabot-line);
+	background: var(--pandabot-surface);
+	display: flex;
+	align-items: center;
+	gap: 9px;
+}
+
+#pandabot-root .pandabot-input {
+	flex: 1;
+	min-width: 0;
+	background: #F1F4F3;
+	border: none;
+	border-radius: 22px;
+	padding: 11px 16px;
+	font: inherit;
+	font-size: 14px;
+	color: var(--pandabot-ink);
+	outline: none;
+	text-align: start;
+}
+
+#pandabot-root .pandabot-input::placeholder {
+	color: var(--pandabot-muted);
+}
+
+#pandabot-root .pandabot-send {
+	width: 40px;
+	height: 40px;
+	border: none;
+	border-radius: 50%;
+	background: var(--pandabot-accent);
+	color: #fff;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	padding: 0;
+}
+
+#pandabot-root .pandabot-send:hover {
+	background: var(--pandabot-accent-dark);
+}
+
+#pandabot-root .pandabot-send .pandabot-icon {
+	width: 19px;
+	height: 19px;
+	transform: scaleX(-1);
+}
+
+#pandabot-root .pandabot-send[disabled],
+#pandabot-root .pandabot-input[disabled] {
+	opacity: .55;
+	cursor: default;
+}
+
+#pandabot-root :focus-visible {
+	outline: 2px solid var(--pandabot-accent);
+	outline-offset: 2px;
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes pandabot-rise {
+	from { opacity: 0; transform: translateY(14px) scale(.97); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes pandabot-fade {
+	from { opacity: 0; transform: translateY(6px); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes pandabot-pop {
+	from { opacity: 0; transform: scale(.9); }
+	to { opacity: 1; transform: none; }
+}
+
+@keyframes pandabot-blink {
+	0%, 60%, 100% { opacity: .3; }
+	30% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	#pandabot-root *,
+	#pandabot-root .pandabot-body {
+		animation: none !important;
+		transition: none !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* ---------- Small screens: the panel takes the viewport ---------- */
+
+@media (max-width: 480px) {
+	#pandabot-root .pandabot-panel {
+		width: auto;
+		height: auto;
+		max-height: none;
+		inset: 0;
+		bottom: 0;
+		border-radius: 0;
+		border: none;
+		max-width: none;
+	}
+
+	#pandabot-root.pandabot--left .pandabot-panel,
+	#pandabot-root.pandabot--right .pandabot-panel {
+		left: 0;
+		right: 0;
+	}
+
+	#pandabot-root .pandabot-launcher {
+		bottom: 18px;
+	}
+
+	#pandabot-root.pandabot--left .pandabot-launcher {
+		left: 18px;
+	}
+
+	#pandabot-root.pandabot--right .pandabot-launcher {
+		right: 18px;
+	}
+
+	#pandabot-root .pandabot-teaser {
+		display: none;
+	}
+
+	#pandabot-root .pandabot-foot {
+		padding-bottom: calc(11px + var(--pandabot-mobile-gap));
+	}
+}
+
+
+/* ---------- Theme armour ----------
+ *
+ * Themes routinely style bare <button>/<a> elements with !important, which
+ * a scoped selector alone cannot beat. The medicate theme on this site does
+ * exactly that: [type="button"] { color: var(--white-color) !important },
+ * which rendered the chips and the teaser as white text on white. These
+ * rules restate only the properties a theme can realistically hijack —
+ * everything else stays in the sections above, unforced.
+ */
+
+#pandabot-root button,
+#pandabot-root .pandabot-cta-primary,
+#pandabot-root .pandabot-cta-sec {
+	font-family: inherit;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	text-shadow: none !important;
+	text-decoration: none !important;
+	box-shadow: none !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+}
+
+#pandabot-root .pandabot-launcher-btn,
+#pandabot-root .pandabot-send,
+#pandabot-root .pandabot-cta-primary {
+	background: var(--pandabot-accent) !important;
+	color: #fff !important;
+}
+
+#pandabot-root .pandabot-launcher-btn:hover,
+#pandabot-root .pandabot-send:hover,
+#pandabot-root .pandabot-cta-primary:hover {
+	background: var(--pandabot-accent-dark) !important;
+	color: #fff !important;
+}
+
+#pandabot-root .pandabot-chip,
+#pandabot-root .pandabot-cta-sec {
+	background: var(--pandabot-surface) !important;
+	color: var(--pandabot-accent) !important;
+	border: 1px solid var(--pandabot-soft) !important;
+}
+
+#pandabot-root .pandabot-chip:hover,
+#pandabot-root .pandabot-cta-sec:hover {
+	background: var(--pandabot-tint) !important;
+	color: var(--pandabot-accent) !important;
+}
+
+#pandabot-root .pandabot-teaser-text {
+	background: none !important;
+	color: var(--pandabot-accent-dark) !important;
+	border: none !important;
+}
+
+#pandabot-root .pandabot-teaser-close,
+#pandabot-root .pandabot-close {
+	background: none !important;
+	border: none !important;
+}
+
+#pandabot-root .pandabot-close {
+	color: var(--pandabot-soft) !important;
+}
+
+#pandabot-root .pandabot-input {
+	background: #F1F4F3 !important;
+	color: var(--pandabot-ink) !important;
+	border: none !important;
+	box-shadow: none !important;
+	text-transform: none !important;
+	line-height: normal !important;
+	height: auto !important;
+	margin: 0 !important;
+}
