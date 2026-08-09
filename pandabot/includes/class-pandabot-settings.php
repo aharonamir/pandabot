@@ -115,12 +115,19 @@ class Pandabot_Settings {
 			// Contact facts (§6) — used both for the widget's CTA buttons and
 			// for the fixed contact block appended to every system prompt, so
 			// the two can never drift apart.
+			//
+			// Deliberately empty: these are per-site details, not product
+			// defaults, and hardcoding one clinic's phone number into shipped
+			// source would publish it to every install. Set them on the
+			// settings screen, or as wp-config.php constants — see
+			// constant_map() and config-sample.php. Every consumer treats an
+			// empty value as "this channel doesn't exist" and hides it.
 			'contact'             => array(
-				'booking_url'  => '/make-appointments/',
-				'phone'        => '054-6657207',
-				'whatsapp'     => '972546657207',
-				'email'        => 'info@pandakids-clinic.co.il',
-				'address'      => 'בת-חן 31, מושב חרות',
+				'booking_url'  => '',
+				'phone'        => '',
+				'whatsapp'     => '',
+				'email'        => '',
+				'address'      => '',
 				'privacy_url'  => '',
 			),
 
@@ -147,16 +154,89 @@ class Pandabot_Settings {
 	}
 
 	/**
+	 * Settings that may instead be supplied as wp-config.php constants, so a
+	 * site's real credentials and contact details never have to live in the
+	 * plugin source or in the database. See config-sample.php.
+	 *
+	 * wp-config.php rather than a .env inside the plugin folder on purpose:
+	 * a dotfile under wp-content/plugins/ is served as plain text by any
+	 * webserver that doesn't explicitly block dotfiles, and it would be
+	 * destroyed by the next plugin update.
+	 *
+	 * @return array<string, array{0:string,1:string}> constant => [group, key]
+	 */
+	public static function constant_map() {
+		return array(
+			'PANDABOT_CHAT_BASE_URL'       => array( 'chat_provider', 'base_url' ),
+			'PANDABOT_CHAT_API_KEY'        => array( 'chat_provider', 'api_key' ),
+			'PANDABOT_CHAT_MODEL'          => array( 'chat_provider', 'model' ),
+			'PANDABOT_EMBEDDINGS_BASE_URL' => array( 'embeddings_provider', 'base_url' ),
+			'PANDABOT_EMBEDDINGS_API_KEY'  => array( 'embeddings_provider', 'api_key' ),
+			'PANDABOT_EMBEDDINGS_MODEL'    => array( 'embeddings_provider', 'model' ),
+			'PANDABOT_CONTACT_BOOKING_URL' => array( 'contact', 'booking_url' ),
+			'PANDABOT_CONTACT_PHONE'       => array( 'contact', 'phone' ),
+			'PANDABOT_CONTACT_WHATSAPP'    => array( 'contact', 'whatsapp' ),
+			'PANDABOT_CONTACT_EMAIL'       => array( 'contact', 'email' ),
+			'PANDABOT_CONTACT_ADDRESS'     => array( 'contact', 'address' ),
+			'PANDABOT_CONTACT_PRIVACY_URL' => array( 'contact', 'privacy_url' ),
+		);
+	}
+
+	/**
 	 * Get the full settings array, merged over defaults so new keys added
 	 * in later versions always have a sane value even for sites that
-	 * activated an older version.
+	 * activated an older version, then overlaid with any wp-config.php
+	 * constants. This is what every consumer should call.
 	 */
 	public static function get_all() {
+		return self::apply_constant_overrides( self::get_all_raw() );
+	}
+
+	/**
+	 * The stored settings WITHOUT constant overlays. Only the save path wants
+	 * this: writing get_all() back would copy a wp-config constant into the
+	 * database, which is exactly what defining it was meant to avoid.
+	 */
+	public static function get_all_raw() {
 		$stored = get_option( self::OPTION_KEY, array() );
 		if ( ! is_array( $stored ) ) {
 			$stored = array();
 		}
 		return self::merge_defaults( self::defaults(), $stored );
+	}
+
+	private static function apply_constant_overrides( array $settings ) {
+		foreach ( self::constant_map() as $constant => $path ) {
+			if ( ! defined( $constant ) ) {
+				continue;
+			}
+			$value = constant( $constant );
+			// An empty constant means "not configured", not "set to blank" —
+			// otherwise a placeholder left in wp-config.php would silently
+			// blank out a working setting.
+			if ( ! is_scalar( $value ) || '' === (string) $value ) {
+				continue;
+			}
+			$settings[ $path[0] ][ $path[1] ] = (string) $value;
+		}
+		return $settings;
+	}
+
+	/**
+	 * Name of the constant currently overriding a field, or '' if none.
+	 * The settings screen uses this to lock the field and say where the
+	 * value actually comes from.
+	 */
+	public static function overridden_by( $group, $key ) {
+		foreach ( self::constant_map() as $constant => $path ) {
+			if ( $path[0] !== $group || $path[1] !== $key ) {
+				continue;
+			}
+			if ( defined( $constant ) && is_scalar( constant( $constant ) ) && '' !== (string) constant( $constant ) ) {
+				return $constant;
+			}
+		}
+		return '';
 	}
 
 	/**
@@ -224,7 +304,8 @@ class Pandabot_Settings {
 	 * fields never wipes the ones it left out.
 	 */
 	public static function sanitize_settings( array $input ) {
-		$current = self::get_all();
+		// Raw, so a constant-supplied value is never persisted into the DB.
+		$current = self::get_all_raw();
 
 		if ( isset( $input['chat_provider'] ) && is_array( $input['chat_provider'] ) ) {
 			$current['chat_provider'] = self::sanitize_provider( $input['chat_provider'], $current['chat_provider'] );
@@ -384,7 +465,7 @@ class Pandabot_Settings {
 	}
 
 	public static function add_excluded_id( $id ) {
-		$all = self::get_all();
+		$all = self::get_all_raw();
 		$id  = (int) $id;
 		if ( ! in_array( $id, $all['excluded_ids'], true ) ) {
 			$all['excluded_ids'][] = $id;
@@ -393,7 +474,7 @@ class Pandabot_Settings {
 	}
 
 	public static function remove_excluded_id( $id ) {
-		$all                 = self::get_all();
+		$all                 = self::get_all_raw();
 		$id                  = (int) $id;
 		$all['excluded_ids'] = array_values(
 			array_filter(
@@ -465,7 +546,7 @@ class Pandabot_Settings {
 	 * pandabot_embeddings rows back to a specific entry across edits.
 	 */
 	public static function add_manual_qa( $question, $answer ) {
-		$all = self::get_all();
+		$all = self::get_all_raw();
 		$id  = (int) get_option( 'pandabot_manual_qa_next_id', 1 );
 		update_option( 'pandabot_manual_qa_next_id', $id + 1, false );
 
@@ -480,7 +561,7 @@ class Pandabot_Settings {
 	}
 
 	public static function delete_manual_qa( $id ) {
-		$all              = self::get_all();
+		$all              = self::get_all_raw();
 		$all['manual_qa'] = array_values(
 			array_filter(
 				$all['manual_qa'],

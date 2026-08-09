@@ -4,7 +4,7 @@ Tags: chatbot, rag, hebrew, openai, chat
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,13 @@ clock, so a quiet site can lag by hours. You can run it by hand from Settings,
 or point a real cron job at `wp-cron.php`.
 
 == Changelog ==
+
+= 1.1.0 =
+* Contact details are no longer hardcoded in the source. They can be supplied
+  as wp-config.php constants, or baked into the zip at build time from a
+  gitignored config file. Fields backed by a constant show as locked in the
+  admin and are never written to the database. Empty contact channels are now
+  omitted from the widget and from the system prompt rather than rendered blank.
 
 = 1.0.0 =
 * Hebrew admin translation, readme, and help-text pass.

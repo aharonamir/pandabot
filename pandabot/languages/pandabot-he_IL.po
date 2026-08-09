@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PandaBot\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 09:43+0000\n"
-"PO-Revision-Date: 2026-08-09 09:43+0000\n"
+"POT-Creation-Date: 2026-08-09 10:35+0000\n"
+"PO-Revision-Date: 2026-08-09 10:35+0000\n"
 "Last-Translator: Panda Kids Clinic\n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -69,7 +69,7 @@ msgid "First question"
 msgstr "שאלה ראשונה"
 
 #: pandabot/admin/views/conversations.php:119
-#: pandabot/admin/views/settings.php:173
+#: pandabot/admin/views/settings.php:203
 msgid "Guardrails"
 msgstr "מגבלות בטיחות"
 
@@ -453,440 +453,449 @@ msgstr "עודכן (UTC)"
 msgid "Actions"
 msgstr "פעולות"
 
-#: pandabot/admin/views/settings.php:101
-#: pandabot/admin/views/settings.php:142
-msgid "בדיקת חיבור"
-msgstr ""
-
-#: pandabot/admin/views/settings.php:107
-msgid "Embeddings provider"
-msgstr "ספק ההטמעות"
-
-#: pandabot/admin/views/settings.php:132
-msgid "Vector dimension"
-msgstr "ממד הווקטור"
-
-#: pandabot/admin/views/settings.php:136
-msgid "Auto-filled by \"Test connection\". Changing embedding models later will require a full reindex."
-msgstr "מתמלא אוטומטית בלחיצה על ״בדיקת חיבור״. החלפת מודל ההטמעות בהמשך תחייב אינדוקס מלא מחדש."
-
-#: pandabot/admin/views/settings.php:148
-msgid "Content scope"
-msgstr "היקף התוכן"
-
-#: pandabot/admin/views/settings.php:151
-msgid "Post types to index"
-msgstr "סוגי תוכן לאינדוקס"
-
-#: pandabot/admin/views/settings.php:164
-msgid "Excluded post/page IDs"
-msgstr "מזהי פוסטים/דפים מוחרגים"
-
-#: pandabot/admin/views/settings.php:168
-msgid "Comma-separated post/page IDs to skip when indexing (e.g. a legal page you never want the bot quoting from). Takes effect on next save/reindex."
-msgstr "מזהי פוסטים/דפים מופרדים בפסיקים שיידלגו באינדוקס (למשל דף משפטי שאינכם רוצים שהבוט יצטט ממנו). ייכנס לתוקף בשמירה או באינדוקס הבא."
-
-#: pandabot/admin/views/settings.php:176
-msgid "System prompt"
-msgstr "הנחיית מערכת"
-
-#: pandabot/admin/views/settings.php:179
-msgid "The clinic's fixed contact facts are appended automatically at call time — no need to repeat them here."
-msgstr "פרטי יצירת הקשר הקבועים של הקליניקה מצורפים אוטומטית בכל פנייה — אין צורך לחזור עליהם כאן."
-
-#: pandabot/admin/views/settings.php:183
-msgid "Keyword watchlist"
-msgstr "רשימת מילות מפתח לניטור"
-
-#: pandabot/admin/views/settings.php:186
-msgid "One phrase per line. A match short-circuits before the model is called at all (safety net, not the main mechanism — the system prompt does the real work)."
-msgstr "ביטוי אחד בכל שורה. התאמה עוצרת את הפנייה עוד לפני קריאה למודל (רשת ביטחון, לא המנגנון העיקרי — הנחיית המערכת עושה את העבודה האמיתית)."
-
-#: pandabot/admin/views/settings.php:190
-msgid "Medical redirect message"
-msgstr "הודעת הפניה רפואית"
-
-#: pandabot/admin/views/settings.php:194
-msgid "No-context fallback message"
-msgstr "הודעת גיבוי כשאין הקשר"
-
-#: pandabot/admin/views/settings.php:198
-msgid "Input-too-long message"
-msgstr "הודעת ״הודעה ארוכה מדי״"
-
-#: pandabot/admin/views/settings.php:202
-msgid "Generic error message (provider/connection failure)"
-msgstr "הודעת שגיאה כללית (כשל ספק/חיבור)"
-
-#: pandabot/admin/views/settings.php:204
-msgid "Shown to site visitors on any internal/provider error — the real error detail is never exposed publicly, only logged server-side."
-msgstr "מוצגת למבקרי האתר בכל שגיאה פנימית או שגיאת ספק — פרטי השגיאה האמיתיים לעולם אינם נחשפים בפומבי, אלא נרשמים בשרת בלבד."
-
-#: pandabot/admin/views/settings.php:208
-msgid "Rate limiting"
-msgstr "הגבלת קצב"
-
-#: pandabot/admin/views/settings.php:21
-msgid "PandaBot — Settings"
-msgstr "פנדהבוט — הגדרות"
-
-#: pandabot/admin/views/settings.php:211
-msgid "Per IP / minute"
-msgstr "לכל IP / דקה"
-
-#: pandabot/admin/views/settings.php:215
-msgid "Per IP / hour"
-msgstr "לכל IP / שעה"
-
-#: pandabot/admin/views/settings.php:219
-msgid "Per session (soft cap)"
-msgstr "לכל שיחה (מכסה רכה)"
-
-#: pandabot/admin/views/settings.php:223
-msgid "Global / day"
-msgstr "כללי / יום"
-
-#: pandabot/admin/views/settings.php:227
-msgid "Max tokens per reply"
-msgstr "מקסימום טוקנים לתשובה"
-
-#: pandabot/admin/views/settings.php:231
-msgid "Max context characters"
-msgstr "מקסימום תווי הקשר"
-
-#: pandabot/admin/views/settings.php:235
-msgid "Input character cap"
-msgstr "מגבלת תווים בהודעה"
-
-#: pandabot/admin/views/settings.php:239
-msgid "Rate-limited message"
-msgstr "הודעת חסימה עקב עומס"
-
-#: pandabot/admin/views/settings.php:244
-msgid "Widget appearance"
-msgstr "מראה הווידג׳ט"
-
-#: pandabot/admin/views/settings.php:247
-msgid "Accent color"
-msgstr "צבע ראשי"
-
-#: pandabot/admin/views/settings.php:25
-msgid "Settings saved."
-msgstr "ההגדרות נשמרו."
-
-#: pandabot/admin/views/settings.php:250
-msgid "The whole widget palette (header, bubbles, buttons, chips) is derived from this one color. Set it to the theme's main color so the widget reads as part of the site."
-msgstr "כל לוח הצבעים של הווידג׳ט (כותרת, בועות, כפתורים, צ׳יפים) נגזר מהצבע הזה. כדאי להתאים אותו לצבע הראשי של התבנית כדי שהווידג׳ט ייראה חלק מהאתר."
-
-#: pandabot/admin/views/settings.php:254
-msgid "Panel corner radius (px)"
-msgstr "עיגול פינות החלון (פיקסלים)"
-
-#: pandabot/admin/views/settings.php:258
-msgid "Screen corner"
-msgstr "פינת המסך"
-
-#: pandabot/admin/views/settings.php:261
-msgid "Bottom left (natural for RTL)"
-msgstr "שמאל למטה (טבעי לעברית)"
-
-#: pandabot/admin/views/settings.php:262
-msgid "Bottom right"
-msgstr "ימין למטה"
-
-#: pandabot/admin/views/settings.php:267
-msgid "Launcher icon"
-msgstr "אייקון הכפתור הצף"
-
-#: pandabot/admin/views/settings.php:270
-msgid "Chat bubble"
-msgstr "בועת צ׳אט"
-
-#: pandabot/admin/views/settings.php:271
-msgid "Question mark"
-msgstr "סימן שאלה"
-
-#: pandabot/admin/views/settings.php:272
-msgid "Leaf"
-msgstr "עלה"
-
-#: pandabot/admin/views/settings.php:277
-msgid "Distance from bottom (px)"
-msgstr "מרחק מלמטה (פיקסלים)"
-
-#: pandabot/admin/views/settings.php:280
-msgid "Raise the launcher above other floating buttons in the same corner (back-to-top, accessibility toolbar, cookie banner). This theme's back-to-top button occupies the bottom-left corner up to about 80px, so ~96 clears it."
-msgstr "מרים את הכפתור הצף מעל כפתורים צפים אחרים באותה פינה (חזרה למעלה, סרגל נגישות, באנר עוגיות). כפתור ״חזרה למעלה״ של התבנית הזו תופס את הפינה השמאלית התחתונה עד גובה של כ-80 פיקסלים, ולכן ערך של כ-96 מפנה אותו."
-
-#: pandabot/admin/views/settings.php:284
-msgid "Distance from side (px)"
-msgstr "מרחק מהצד (פיקסלים)"
-
-#: pandabot/admin/views/settings.php:288
-msgid "Extra space under input on mobile (px)"
-msgstr "מרווח נוסף מתחת לשדה ההקלדה בנייד (פיקסלים)"
-
-#: pandabot/admin/views/settings.php:291
-msgid "On phones the chat panel fills the screen, so a floating accessibility or chat button can land on top of the send button. Increase this to push the input row clear of it — around 60 is usually enough."
-msgstr "בנייד חלון הצ׳אט תופס את כל המסך, ולכן כפתור נגישות או צ׳אט צף עלול לכסות את כפתור השליחה. הגדילו את הערך כדי להרחיק את שורת ההקלדה ממנו — בדרך כלל כ-60 מספיק."
-
-#: pandabot/admin/views/settings.php:295
-msgid "Header avatar image URL"
-msgstr "כתובת תמונת הפרופיל בכותרת"
-
-#: pandabot/admin/views/settings.php:298
-msgid "Optional. Leave empty to use the built-in icon. Must be hosted on this site — the widget loads no third-party assets."
-msgstr "אופציונלי. השאירו ריק כדי להשתמש באייקון המובנה. התמונה חייבת להתארח באתר הזה — הווידג׳ט אינו טוען קבצים מצד שלישי."
-
-#: pandabot/admin/views/settings.php:302
-msgid "Header title"
-msgstr "כותרת החלון"
-
-#: pandabot/admin/views/settings.php:306
-msgid "Header status line"
-msgstr "שורת סטטוס בכותרת"
-
-#: pandabot/admin/views/settings.php:31
-msgid "IP hashing salt regenerated. Existing stored hashes can no longer be matched to any visitor, and per-IP rate-limit counters have been reset."
-msgstr "מלח הגיבוב של כתובות ה-IP חודש. הגיבובים השמורים אינם ניתנים עוד לשיוך לאף מבקר, ומוני הגבלת הקצב לפי IP אופסו."
-
-#: pandabot/admin/views/settings.php:310
-msgid "Teaser bubble text"
-msgstr "טקסט בועת ההזמנה"
-
-#: pandabot/admin/views/settings.php:313
-msgid "Shown next to the launcher. Leave empty to show only the button."
-msgstr "מוצג ליד הכפתור הצף. השאירו ריק כדי להציג את הכפתור בלבד."
-
-#: pandabot/admin/views/settings.php:317
-msgid "Greeting"
-msgstr "הודעת פתיחה"
-
-#: pandabot/admin/views/settings.php:321
-msgid "Suggested prompts"
-msgstr "שאלות מוצעות"
-
-#: pandabot/admin/views/settings.php:324
-msgid "One per line, up to 6. Shown as chips under the greeting until the visitor sends their first message."
-msgstr "אחת בכל שורה, עד 6. מוצגות כצ׳יפים מתחת להודעת הפתיחה עד שהמבקר שולח הודעה ראשונה."
-
-#: pandabot/admin/views/settings.php:328
-msgid "Auto-open after (seconds)"
-msgstr "פתיחה אוטומטית אחרי (שניות)"
-
-#: pandabot/admin/views/settings.php:331
-msgid "0 keeps the panel closed until the visitor clicks — the recommended setting."
-msgstr "0 משאיר את החלון סגור עד שהמבקר לוחץ — ההגדרה המומלצת."
-
-#: pandabot/admin/views/settings.php:335
-msgid "Consent line"
-msgstr "שורת הסכמה"
-
-#: pandabot/admin/views/settings.php:338
-msgid "Always visible above the input. The privacy-policy link below is appended automatically when a URL is set, so don't repeat it here."
-msgstr "מוצגת תמיד מעל שדה ההקלדה. הקישור למדיניות הפרטיות שלמטה מצורף אוטומטית כשמוגדרת כתובת, ולכן אין צורך לחזור עליו כאן."
-
-#: pandabot/admin/views/settings.php:343
-msgid "Contact & CTA targets"
-msgstr "פרטי קשר ויעדי הכפתורים"
-
-#: pandabot/admin/views/settings.php:344
-msgid "These feed both the widget's action buttons and the fixed contact block appended to every system prompt — so what the bot says and what the button does can never drift apart."
-msgstr "פרטים אלה מזינים גם את כפתורי הפעולה של הווידג׳ט וגם את בלוק פרטי הקשר הקבוע שמצורף לכל הנחיית מערכת — כך שמה שהבוט אומר ומה שהכפתור עושה לעולם לא יסתרו זה את זה."
-
-#: pandabot/admin/views/settings.php:347
-msgid "Booking URL"
-msgstr "כתובת לתיאום שיחה"
-
-#: pandabot/admin/views/settings.php:351
-msgid "Phone"
-msgstr "טלפון"
-
-#: pandabot/admin/views/settings.php:355
-msgid "WhatsApp number"
-msgstr "מספר וואטסאפ"
-
-#: pandabot/admin/views/settings.php:358
-msgid "International format without + or dashes, e.g. 972546657207. Leave empty to hide the WhatsApp button."
-msgstr "פורמט בינלאומי ללא + וללא מקפים, למשל 972546657207. השאירו ריק כדי להסתיר את כפתור הוואטסאפ."
-
-#: pandabot/admin/views/settings.php:362
-msgid "Email"
-msgstr "אימייל"
-
-#: pandabot/admin/views/settings.php:366
-msgid "Address"
-msgstr "כתובת"
-
-#: pandabot/admin/views/settings.php:370
-msgid "Privacy policy URL"
-msgstr "כתובת מדיניות הפרטיות"
-
-#: pandabot/admin/views/settings.php:375
-msgid "Cost estimation"
-msgstr "הערכת עלות"
-
-#: pandabot/admin/views/settings.php:376
-msgid "Your provider's prices per 1,000 tokens. Used only to turn logged token counts into the estimate on the dashboard — leave at 0 to hide the cost figure."
-msgstr "המחירים של הספק שלכם ל-1,000 טוקנים. משמשים רק כדי להפוך את ספירת הטוקנים להערכה בלוח הבקרה — השאירו 0 כדי להסתיר את נתון העלות."
-
-#: pandabot/admin/views/settings.php:379
-msgid "Chat input / 1K tokens"
-msgstr "קלט צ׳אט / 1,000 טוקנים"
-
-#: pandabot/admin/views/settings.php:383
-msgid "Chat output / 1K tokens"
-msgstr "פלט צ׳אט / 1,000 טוקנים"
-
-#: pandabot/admin/views/settings.php:387
-msgid "Embeddings / 1K tokens"
-msgstr "הטמעות / 1,000 טוקנים"
-
-#: pandabot/admin/views/settings.php:39
-msgid "Retention cleanup finished. %s conversations were past the retention window and have been deleted."
-msgstr "ניקוי הנתונים הסתיים. %s שיחות עברו את תקופת השמירה ונמחקו."
-
-#: pandabot/admin/views/settings.php:392
-msgid "Privacy & data retention"
-msgstr "פרטיות ושמירת נתונים"
-
-#: pandabot/admin/views/settings.php:394
-msgid "Visitor IP addresses are never stored — only a salted SHA-256 hash, used solely for rate limiting. No names, emails or accounts are collected, so a chat log can only ever be linked back to a person by what the visitor chose to type into it."
-msgstr "כתובות IP של מבקרים לעולם אינן נשמרות — נשמר רק גיבוב SHA-256 עם מלח, המשמש להגבלת קצב בלבד. לא נאספים שמות, כתובות אימייל או חשבונות, ולכן ניתן לקשר יומן שיחה לאדם רק לפי מה שהמבקר בחר להקליד בעצמו."
-
-#: pandabot/admin/views/settings.php:399
-msgid "Delete chat logs after (days)"
-msgstr "מחיקת יומני צ׳אט אחרי (ימים)"
-
-#: pandabot/admin/views/settings.php:402
-msgid "A daily job deletes conversations, their messages and their analytics events once they pass this age. Set to 0 to keep everything forever — legal only if your privacy policy says so."
-msgstr "משימה יומית מוחקת שיחות, את ההודעות שבהן ואת אירועי הניתוח שלהן ברגע שהן עוברות את הגיל הזה. הגדירו 0 כדי לשמור הכול לנצח — חוקי רק אם מדיניות הפרטיות שלכם אומרת זאת."
-
-#: pandabot/admin/views/settings.php:406
-msgid "On plugin deletion"
-msgstr "בעת מחיקת התוסף"
-
-#: pandabot/admin/views/settings.php:410
-msgid "Drop all PandaBot tables and settings when the plugin is deleted"
-msgstr "מחיקת כל טבלאות והגדרות פנדהבוט כשהתוסף נמחק"
-
-#: pandabot/admin/views/settings.php:412
-msgid "Off by default. While off, deleting the plugin leaves your chat logs and the embedded site index in the database, so reinstalling picks up exactly where you left off — no re-indexing cost. Turn it on only when you are decommissioning the bot for good."
-msgstr "כבוי כברירת מחדל. כל עוד הוא כבוי, מחיקת התוסף משאירה את יומני הצ׳אט ואת אינדקס האתר במסד הנתונים, כך שהתקנה מחדש ממשיכה בדיוק מאותה נקודה — ללא עלות אינדוקס מחדש. הפעילו רק כשאתם מסיימים עם הבוט סופית."
-
-#: pandabot/admin/views/settings.php:417
-msgid "שמור הגדרות"
-msgstr ""
-
-#: pandabot/admin/views/settings.php:422
-msgid "Stored data"
-msgstr "נתונים שמורים"
-
-#: pandabot/admin/views/settings.php:426
-msgid "Conversations stored"
-msgstr "שיחות שמורות"
-
-#: pandabot/admin/views/settings.php:430
-msgid "Messages stored"
-msgstr "הודעות שמורות"
-
-#: pandabot/admin/views/settings.php:434
-msgid "Analytics events stored"
-msgstr "אירועי ניתוח שמורים"
-
-#: pandabot/admin/views/settings.php:438
-msgid "Oldest conversation"
-msgstr "השיחה הוותיקה ביותר"
-
-#: pandabot/admin/views/settings.php:450
-msgid "Last cleanup run"
-msgstr "ניקוי אחרון"
-
-#: pandabot/admin/views/settings.php:455
-msgid "never"
-msgstr "מעולם לא"
-
-#: pandabot/admin/views/settings.php:460
-msgid "Next cleanup scheduled"
-msgstr "הניקוי הבא מתוזמן ל"
-
-#: pandabot/admin/views/settings.php:465
-msgid "not scheduled"
-msgstr "לא מתוזמן"
-
-#: pandabot/admin/views/settings.php:472
-msgid "Cleanup runs on WP-Cron, which fires on site traffic rather than on a real system clock — on a quiet site it can lag by a few hours. Run it by hand any time:"
-msgstr "הניקוי רץ על WP-Cron, שמופעל על ידי תנועה באתר ולא על ידי שעון מערכת אמיתי — באתר שקט הוא עלול להתעכב בכמה שעות. אפשר להריץ אותו ידנית בכל עת:"
-
-#: pandabot/admin/views/settings.php:478
-msgid "Run retention cleanup now"
-msgstr "הרצת ניקוי נתונים עכשיו"
-
-#: pandabot/admin/views/settings.php:481
-msgid "IP hashing salt"
-msgstr "מלח הגיבוב של כתובות IP"
-
-#: pandabot/admin/views/settings.php:483
-msgid "Rate limiting counts requests per visitor without ever storing an IP: the address is hashed with a secret salt held only in this database. Regenerating the salt permanently severs any link between stored hashes and a visitor — useful after a data-access request, or if the database was ever exposed. It also resets everyone's current rate-limit counters."
-msgstr "הגבלת הקצב סופרת בקשות לכל מבקר בלי לשמור כתובת IP אף פעם: הכתובת עוברת גיבוב עם מלח סודי שנשמר במסד הנתונים הזה בלבד. חידוש המלח מנתק לצמיתות כל קשר בין גיבובים שמורים לבין מבקר — שימושי אחרי בקשת עיון בנתונים, או אם מסד הנתונים נחשף אי פעם. הפעולה גם מאפסת את מוני הגבלת הקצב הנוכחיים של כולם."
-
-#: pandabot/admin/views/settings.php:488
-msgid "Regenerate salt"
-msgstr "חידוש המלח"
-
-#: pandabot/admin/views/settings.php:491
-#: pandabot/admin/views/settings.php:504
-msgid "Delete all chat logs"
-msgstr "מחיקת כל יומני הצ׳אט"
-
-#: pandabot/admin/views/settings.php:493
-msgid "Immediately deletes every conversation, message and analytics event, whatever their age. Your dashboard history goes with them. The indexed site content is not affected, so the bot keeps working and nothing needs re-embedding."
-msgstr "מוחק מיידית כל שיחה, הודעה ואירוע ניתוח, בכל גיל שהוא. ההיסטוריה בלוח הבקרה נמחקת יחד איתם. תוכן האתר שבאינדקס אינו מושפע, כך שהבוט ממשיך לעבוד ואין צורך בהטמעה מחדש."
-
-#: pandabot/admin/views/settings.php:501
-msgid "I understand this permanently deletes all chat history."
-msgstr "אני מבין/ה שפעולה זו מוחקת לצמיתות את כל היסטוריית הצ׳אט."
-
-#: pandabot/admin/views/settings.php:51
-msgid "All chat logs deleted (%s conversations). Indexed site content was left untouched."
-msgstr "כל יומני הצ׳אט נמחקו (%s שיחות). תוכן האתר שבאינדקס לא נפגע."
-
-#: pandabot/admin/views/settings.php:59
-msgid "Nothing was deleted — you need to tick the confirmation box first."
-msgstr "לא נמחק דבר — יש לסמן תחילה את תיבת האישור."
-
-#: pandabot/admin/views/settings.php:67
-msgid "Chat and embeddings are two independently configured OpenAI-compatible providers — some DeepSeek/OpenRouter-style endpoints only support one of the two. API keys are never displayed here and never sent to the browser; leave the key field blank to keep the currently saved key."
-msgstr "הצ׳אט וההטמעות הם שני ספקים תואמי-OpenAI שמוגדרים בנפרד — חלק מנקודות הקצה בסגנון DeepSeek/OpenRouter תומכות רק באחד מהם. מפתחות API לעולם אינם מוצגים כאן ואינם נשלחים לדפדפן; השאירו את שדה המפתח ריק כדי לשמור על המפתח הקיים."
-
-#: pandabot/admin/views/settings.php:74
-msgid "Chat provider"
-msgstr "ספק הצ׳אט"
-
-#: pandabot/admin/views/settings.php:77
-#: pandabot/admin/views/settings.php:110
-msgid "Base URL"
-msgstr "כתובת בסיס"
-
-#: pandabot/admin/views/settings.php:84
-#: pandabot/admin/views/settings.php:117
+#: pandabot/admin/views/settings.php:105
+#: pandabot/admin/views/settings.php:143
 msgid "Model"
 msgstr "מודל"
 
-#: pandabot/admin/views/settings.php:91
-#: pandabot/admin/views/settings.php:124
+#: pandabot/admin/views/settings.php:113
+#: pandabot/admin/views/settings.php:151
 msgid "API key"
 msgstr "מפתח API"
 
-#: pandabot/admin/views/settings.php:95
-#: pandabot/admin/views/settings.php:128
+#: pandabot/admin/views/settings.php:119
+#: pandabot/admin/views/settings.php:157
+msgid "מוגדר ב-wp-config.php"
+msgstr ""
+
+#: pandabot/admin/views/settings.php:119
+#: pandabot/admin/views/settings.php:157
 msgid "•••••••• (מפתח קיים — השאירו ריק כדי לשמור)"
 msgstr ""
 
-#: pandabot/admin/views/settings.php:95
-#: pandabot/admin/views/settings.php:128
+#: pandabot/admin/views/settings.php:119
+#: pandabot/admin/views/settings.php:157
 msgid "לא הוגדר"
 msgstr ""
+
+#: pandabot/admin/views/settings.php:126
+#: pandabot/admin/views/settings.php:172
+msgid "בדיקת חיבור"
+msgstr ""
+
+#: pandabot/admin/views/settings.php:132
+msgid "Embeddings provider"
+msgstr "ספק ההטמעות"
+
+#: pandabot/admin/views/settings.php:162
+msgid "Vector dimension"
+msgstr "ממד הווקטור"
+
+#: pandabot/admin/views/settings.php:166
+msgid "Auto-filled by \"Test connection\". Changing embedding models later will require a full reindex."
+msgstr "מתמלא אוטומטית בלחיצה על ״בדיקת חיבור״. החלפת מודל ההטמעות בהמשך תחייב אינדוקס מלא מחדש."
+
+#: pandabot/admin/views/settings.php:178
+msgid "Content scope"
+msgstr "היקף התוכן"
+
+#: pandabot/admin/views/settings.php:181
+msgid "Post types to index"
+msgstr "סוגי תוכן לאינדוקס"
+
+#: pandabot/admin/views/settings.php:194
+msgid "Excluded post/page IDs"
+msgstr "מזהי פוסטים/דפים מוחרגים"
+
+#: pandabot/admin/views/settings.php:198
+msgid "Comma-separated post/page IDs to skip when indexing (e.g. a legal page you never want the bot quoting from). Takes effect on next save/reindex."
+msgstr "מזהי פוסטים/דפים מופרדים בפסיקים שיידלגו באינדוקס (למשל דף משפטי שאינכם רוצים שהבוט יצטט ממנו). ייכנס לתוקף בשמירה או באינדוקס הבא."
+
+#: pandabot/admin/views/settings.php:206
+msgid "System prompt"
+msgstr "הנחיית מערכת"
+
+#: pandabot/admin/views/settings.php:209
+msgid "The clinic's fixed contact facts are appended automatically at call time — no need to repeat them here."
+msgstr "פרטי יצירת הקשר הקבועים של הקליניקה מצורפים אוטומטית בכל פנייה — אין צורך לחזור עליהם כאן."
+
+#: pandabot/admin/views/settings.php:213
+msgid "Keyword watchlist"
+msgstr "רשימת מילות מפתח לניטור"
+
+#: pandabot/admin/views/settings.php:216
+msgid "One phrase per line. A match short-circuits before the model is called at all (safety net, not the main mechanism — the system prompt does the real work)."
+msgstr "ביטוי אחד בכל שורה. התאמה עוצרת את הפנייה עוד לפני קריאה למודל (רשת ביטחון, לא המנגנון העיקרי — הנחיית המערכת עושה את העבודה האמיתית)."
+
+#: pandabot/admin/views/settings.php:220
+msgid "Medical redirect message"
+msgstr "הודעת הפניה רפואית"
+
+#: pandabot/admin/views/settings.php:224
+msgid "No-context fallback message"
+msgstr "הודעת גיבוי כשאין הקשר"
+
+#: pandabot/admin/views/settings.php:228
+msgid "Input-too-long message"
+msgstr "הודעת ״הודעה ארוכה מדי״"
+
+#: pandabot/admin/views/settings.php:232
+msgid "Generic error message (provider/connection failure)"
+msgstr "הודעת שגיאה כללית (כשל ספק/חיבור)"
+
+#: pandabot/admin/views/settings.php:234
+msgid "Shown to site visitors on any internal/provider error — the real error detail is never exposed publicly, only logged server-side."
+msgstr "מוצגת למבקרי האתר בכל שגיאה פנימית או שגיאת ספק — פרטי השגיאה האמיתיים לעולם אינם נחשפים בפומבי, אלא נרשמים בשרת בלבד."
+
+#: pandabot/admin/views/settings.php:238
+msgid "Rate limiting"
+msgstr "הגבלת קצב"
+
+#: pandabot/admin/views/settings.php:241
+msgid "Per IP / minute"
+msgstr "לכל IP / דקה"
+
+#: pandabot/admin/views/settings.php:245
+msgid "Per IP / hour"
+msgstr "לכל IP / שעה"
+
+#: pandabot/admin/views/settings.php:249
+msgid "Per session (soft cap)"
+msgstr "לכל שיחה (מכסה רכה)"
+
+#: pandabot/admin/views/settings.php:253
+msgid "Global / day"
+msgstr "כללי / יום"
+
+#: pandabot/admin/views/settings.php:257
+msgid "Max tokens per reply"
+msgstr "מקסימום טוקנים לתשובה"
+
+#: pandabot/admin/views/settings.php:26
+msgid "Set in wp-config.php as %s — change it there, not here."
+msgstr "מוגדר ב-wp-config.php בשם %s — יש לשנות שם, לא כאן."
+
+#: pandabot/admin/views/settings.php:261
+msgid "Max context characters"
+msgstr "מקסימום תווי הקשר"
+
+#: pandabot/admin/views/settings.php:265
+msgid "Input character cap"
+msgstr "מגבלת תווים בהודעה"
+
+#: pandabot/admin/views/settings.php:269
+msgid "Rate-limited message"
+msgstr "הודעת חסימה עקב עומס"
+
+#: pandabot/admin/views/settings.php:274
+msgid "Widget appearance"
+msgstr "מראה הווידג׳ט"
+
+#: pandabot/admin/views/settings.php:277
+msgid "Accent color"
+msgstr "צבע ראשי"
+
+#: pandabot/admin/views/settings.php:280
+msgid "The whole widget palette (header, bubbles, buttons, chips) is derived from this one color. Set it to the theme's main color so the widget reads as part of the site."
+msgstr "כל לוח הצבעים של הווידג׳ט (כותרת, בועות, כפתורים, צ׳יפים) נגזר מהצבע הזה. כדאי להתאים אותו לצבע הראשי של התבנית כדי שהווידג׳ט ייראה חלק מהאתר."
+
+#: pandabot/admin/views/settings.php:284
+msgid "Panel corner radius (px)"
+msgstr "עיגול פינות החלון (פיקסלים)"
+
+#: pandabot/admin/views/settings.php:288
+msgid "Screen corner"
+msgstr "פינת המסך"
+
+#: pandabot/admin/views/settings.php:291
+msgid "Bottom left (natural for RTL)"
+msgstr "שמאל למטה (טבעי לעברית)"
+
+#: pandabot/admin/views/settings.php:292
+msgid "Bottom right"
+msgstr "ימין למטה"
+
+#: pandabot/admin/views/settings.php:297
+msgid "Launcher icon"
+msgstr "אייקון הכפתור הצף"
+
+#: pandabot/admin/views/settings.php:300
+msgid "Chat bubble"
+msgstr "בועת צ׳אט"
+
+#: pandabot/admin/views/settings.php:301
+msgid "Question mark"
+msgstr "סימן שאלה"
+
+#: pandabot/admin/views/settings.php:302
+msgid "Leaf"
+msgstr "עלה"
+
+#: pandabot/admin/views/settings.php:307
+msgid "Distance from bottom (px)"
+msgstr "מרחק מלמטה (פיקסלים)"
+
+#: pandabot/admin/views/settings.php:310
+msgid "Raise the launcher above other floating buttons in the same corner (back-to-top, accessibility toolbar, cookie banner). This theme's back-to-top button occupies the bottom-left corner up to about 80px, so ~96 clears it."
+msgstr "מרים את הכפתור הצף מעל כפתורים צפים אחרים באותה פינה (חזרה למעלה, סרגל נגישות, באנר עוגיות). כפתור ״חזרה למעלה״ של התבנית הזו תופס את הפינה השמאלית התחתונה עד גובה של כ-80 פיקסלים, ולכן ערך של כ-96 מפנה אותו."
+
+#: pandabot/admin/views/settings.php:314
+msgid "Distance from side (px)"
+msgstr "מרחק מהצד (פיקסלים)"
+
+#: pandabot/admin/views/settings.php:318
+msgid "Extra space under input on mobile (px)"
+msgstr "מרווח נוסף מתחת לשדה ההקלדה בנייד (פיקסלים)"
+
+#: pandabot/admin/views/settings.php:321
+msgid "On phones the chat panel fills the screen, so a floating accessibility or chat button can land on top of the send button. Increase this to push the input row clear of it — around 60 is usually enough."
+msgstr "בנייד חלון הצ׳אט תופס את כל המסך, ולכן כפתור נגישות או צ׳אט צף עלול לכסות את כפתור השליחה. הגדילו את הערך כדי להרחיק את שורת ההקלדה ממנו — בדרך כלל כ-60 מספיק."
+
+#: pandabot/admin/views/settings.php:325
+msgid "Header avatar image URL"
+msgstr "כתובת תמונת הפרופיל בכותרת"
+
+#: pandabot/admin/views/settings.php:328
+msgid "Optional. Leave empty to use the built-in icon. Must be hosted on this site — the widget loads no third-party assets."
+msgstr "אופציונלי. השאירו ריק כדי להשתמש באייקון המובנה. התמונה חייבת להתארח באתר הזה — הווידג׳ט אינו טוען קבצים מצד שלישי."
+
+#: pandabot/admin/views/settings.php:332
+msgid "Header title"
+msgstr "כותרת החלון"
+
+#: pandabot/admin/views/settings.php:336
+msgid "Header status line"
+msgstr "שורת סטטוס בכותרת"
+
+#: pandabot/admin/views/settings.php:340
+msgid "Teaser bubble text"
+msgstr "טקסט בועת ההזמנה"
+
+#: pandabot/admin/views/settings.php:343
+msgid "Shown next to the launcher. Leave empty to show only the button."
+msgstr "מוצג ליד הכפתור הצף. השאירו ריק כדי להציג את הכפתור בלבד."
+
+#: pandabot/admin/views/settings.php:347
+msgid "Greeting"
+msgstr "הודעת פתיחה"
+
+#: pandabot/admin/views/settings.php:351
+msgid "Suggested prompts"
+msgstr "שאלות מוצעות"
+
+#: pandabot/admin/views/settings.php:354
+msgid "One per line, up to 6. Shown as chips under the greeting until the visitor sends their first message."
+msgstr "אחת בכל שורה, עד 6. מוצגות כצ׳יפים מתחת להודעת הפתיחה עד שהמבקר שולח הודעה ראשונה."
+
+#: pandabot/admin/views/settings.php:358
+msgid "Auto-open after (seconds)"
+msgstr "פתיחה אוטומטית אחרי (שניות)"
+
+#: pandabot/admin/views/settings.php:361
+msgid "0 keeps the panel closed until the visitor clicks — the recommended setting."
+msgstr "0 משאיר את החלון סגור עד שהמבקר לוחץ — ההגדרה המומלצת."
+
+#: pandabot/admin/views/settings.php:365
+msgid "Consent line"
+msgstr "שורת הסכמה"
+
+#: pandabot/admin/views/settings.php:368
+msgid "Always visible above the input. The privacy-policy link below is appended automatically when a URL is set, so don't repeat it here."
+msgstr "מוצגת תמיד מעל שדה ההקלדה. הקישור למדיניות הפרטיות שלמטה מצורף אוטומטית כשמוגדרת כתובת, ולכן אין צורך לחזור עליו כאן."
+
+#: pandabot/admin/views/settings.php:373
+msgid "Contact & CTA targets"
+msgstr "פרטי קשר ויעדי הכפתורים"
+
+#: pandabot/admin/views/settings.php:374
+msgid "These feed both the widget's action buttons and the fixed contact block appended to every system prompt — so what the bot says and what the button does can never drift apart."
+msgstr "פרטים אלה מזינים גם את כפתורי הפעולה של הווידג׳ט וגם את בלוק פרטי הקשר הקבוע שמצורף לכל הנחיית מערכת — כך שמה שהבוט אומר ומה שהכפתור עושה לעולם לא יסתרו זה את זה."
+
+#: pandabot/admin/views/settings.php:377
+msgid "Booking URL"
+msgstr "כתובת לתיאום שיחה"
+
+#: pandabot/admin/views/settings.php:382
+msgid "Phone"
+msgstr "טלפון"
+
+#: pandabot/admin/views/settings.php:387
+msgid "WhatsApp number"
+msgstr "מספר וואטסאפ"
+
+#: pandabot/admin/views/settings.php:391
+msgid "International format without + or dashes, e.g. 972546657207. Leave empty to hide the WhatsApp button."
+msgstr "פורמט בינלאומי ללא + וללא מקפים, למשל 972546657207. השאירו ריק כדי להסתיר את כפתור הוואטסאפ."
+
+#: pandabot/admin/views/settings.php:395
+msgid "Email"
+msgstr "אימייל"
+
+#: pandabot/admin/views/settings.php:400
+msgid "Address"
+msgstr "כתובת"
+
+#: pandabot/admin/views/settings.php:405
+msgid "Privacy policy URL"
+msgstr "כתובת מדיניות הפרטיות"
+
+#: pandabot/admin/views/settings.php:41
+msgid "PandaBot — Settings"
+msgstr "פנדהבוט — הגדרות"
+
+#: pandabot/admin/views/settings.php:411
+msgid "Cost estimation"
+msgstr "הערכת עלות"
+
+#: pandabot/admin/views/settings.php:412
+msgid "Your provider's prices per 1,000 tokens. Used only to turn logged token counts into the estimate on the dashboard — leave at 0 to hide the cost figure."
+msgstr "המחירים של הספק שלכם ל-1,000 טוקנים. משמשים רק כדי להפוך את ספירת הטוקנים להערכה בלוח הבקרה — השאירו 0 כדי להסתיר את נתון העלות."
+
+#: pandabot/admin/views/settings.php:415
+msgid "Chat input / 1K tokens"
+msgstr "קלט צ׳אט / 1,000 טוקנים"
+
+#: pandabot/admin/views/settings.php:419
+msgid "Chat output / 1K tokens"
+msgstr "פלט צ׳אט / 1,000 טוקנים"
+
+#: pandabot/admin/views/settings.php:423
+msgid "Embeddings / 1K tokens"
+msgstr "הטמעות / 1,000 טוקנים"
+
+#: pandabot/admin/views/settings.php:428
+msgid "Privacy & data retention"
+msgstr "פרטיות ושמירת נתונים"
+
+#: pandabot/admin/views/settings.php:430
+msgid "Visitor IP addresses are never stored — only a salted SHA-256 hash, used solely for rate limiting. No names, emails or accounts are collected, so a chat log can only ever be linked back to a person by what the visitor chose to type into it."
+msgstr "כתובות IP של מבקרים לעולם אינן נשמרות — נשמר רק גיבוב SHA-256 עם מלח, המשמש להגבלת קצב בלבד. לא נאספים שמות, כתובות אימייל או חשבונות, ולכן ניתן לקשר יומן שיחה לאדם רק לפי מה שהמבקר בחר להקליד בעצמו."
+
+#: pandabot/admin/views/settings.php:435
+msgid "Delete chat logs after (days)"
+msgstr "מחיקת יומני צ׳אט אחרי (ימים)"
+
+#: pandabot/admin/views/settings.php:438
+msgid "A daily job deletes conversations, their messages and their analytics events once they pass this age. Set to 0 to keep everything forever — legal only if your privacy policy says so."
+msgstr "משימה יומית מוחקת שיחות, את ההודעות שבהן ואת אירועי הניתוח שלהן ברגע שהן עוברות את הגיל הזה. הגדירו 0 כדי לשמור הכול לנצח — חוקי רק אם מדיניות הפרטיות שלכם אומרת זאת."
+
+#: pandabot/admin/views/settings.php:442
+msgid "On plugin deletion"
+msgstr "בעת מחיקת התוסף"
+
+#: pandabot/admin/views/settings.php:446
+msgid "Drop all PandaBot tables and settings when the plugin is deleted"
+msgstr "מחיקת כל טבלאות והגדרות פנדהבוט כשהתוסף נמחק"
+
+#: pandabot/admin/views/settings.php:448
+msgid "Off by default. While off, deleting the plugin leaves your chat logs and the embedded site index in the database, so reinstalling picks up exactly where you left off — no re-indexing cost. Turn it on only when you are decommissioning the bot for good."
+msgstr "כבוי כברירת מחדל. כל עוד הוא כבוי, מחיקת התוסף משאירה את יומני הצ׳אט ואת אינדקס האתר במסד הנתונים, כך שהתקנה מחדש ממשיכה בדיוק מאותה נקודה — ללא עלות אינדוקס מחדש. הפעילו רק כשאתם מסיימים עם הבוט סופית."
+
+#: pandabot/admin/views/settings.php:45
+msgid "Settings saved."
+msgstr "ההגדרות נשמרו."
+
+#: pandabot/admin/views/settings.php:453
+msgid "שמור הגדרות"
+msgstr ""
+
+#: pandabot/admin/views/settings.php:458
+msgid "Stored data"
+msgstr "נתונים שמורים"
+
+#: pandabot/admin/views/settings.php:462
+msgid "Conversations stored"
+msgstr "שיחות שמורות"
+
+#: pandabot/admin/views/settings.php:466
+msgid "Messages stored"
+msgstr "הודעות שמורות"
+
+#: pandabot/admin/views/settings.php:470
+msgid "Analytics events stored"
+msgstr "אירועי ניתוח שמורים"
+
+#: pandabot/admin/views/settings.php:474
+msgid "Oldest conversation"
+msgstr "השיחה הוותיקה ביותר"
+
+#: pandabot/admin/views/settings.php:486
+msgid "Last cleanup run"
+msgstr "ניקוי אחרון"
+
+#: pandabot/admin/views/settings.php:491
+msgid "never"
+msgstr "מעולם לא"
+
+#: pandabot/admin/views/settings.php:496
+msgid "Next cleanup scheduled"
+msgstr "הניקוי הבא מתוזמן ל"
+
+#: pandabot/admin/views/settings.php:501
+msgid "not scheduled"
+msgstr "לא מתוזמן"
+
+#: pandabot/admin/views/settings.php:508
+msgid "Cleanup runs on WP-Cron, which fires on site traffic rather than on a real system clock — on a quiet site it can lag by a few hours. Run it by hand any time:"
+msgstr "הניקוי רץ על WP-Cron, שמופעל על ידי תנועה באתר ולא על ידי שעון מערכת אמיתי — באתר שקט הוא עלול להתעכב בכמה שעות. אפשר להריץ אותו ידנית בכל עת:"
+
+#: pandabot/admin/views/settings.php:51
+msgid "IP hashing salt regenerated. Existing stored hashes can no longer be matched to any visitor, and per-IP rate-limit counters have been reset."
+msgstr "מלח הגיבוב של כתובות ה-IP חודש. הגיבובים השמורים אינם ניתנים עוד לשיוך לאף מבקר, ומוני הגבלת הקצב לפי IP אופסו."
+
+#: pandabot/admin/views/settings.php:514
+msgid "Run retention cleanup now"
+msgstr "הרצת ניקוי נתונים עכשיו"
+
+#: pandabot/admin/views/settings.php:517
+msgid "IP hashing salt"
+msgstr "מלח הגיבוב של כתובות IP"
+
+#: pandabot/admin/views/settings.php:519
+msgid "Rate limiting counts requests per visitor without ever storing an IP: the address is hashed with a secret salt held only in this database. Regenerating the salt permanently severs any link between stored hashes and a visitor — useful after a data-access request, or if the database was ever exposed. It also resets everyone's current rate-limit counters."
+msgstr "הגבלת הקצב סופרת בקשות לכל מבקר בלי לשמור כתובת IP אף פעם: הכתובת עוברת גיבוב עם מלח סודי שנשמר במסד הנתונים הזה בלבד. חידוש המלח מנתק לצמיתות כל קשר בין גיבובים שמורים לבין מבקר — שימושי אחרי בקשת עיון בנתונים, או אם מסד הנתונים נחשף אי פעם. הפעולה גם מאפסת את מוני הגבלת הקצב הנוכחיים של כולם."
+
+#: pandabot/admin/views/settings.php:524
+msgid "Regenerate salt"
+msgstr "חידוש המלח"
+
+#: pandabot/admin/views/settings.php:527
+#: pandabot/admin/views/settings.php:540
+msgid "Delete all chat logs"
+msgstr "מחיקת כל יומני הצ׳אט"
+
+#: pandabot/admin/views/settings.php:529
+msgid "Immediately deletes every conversation, message and analytics event, whatever their age. Your dashboard history goes with them. The indexed site content is not affected, so the bot keeps working and nothing needs re-embedding."
+msgstr "מוחק מיידית כל שיחה, הודעה ואירוע ניתוח, בכל גיל שהוא. ההיסטוריה בלוח הבקרה נמחקת יחד איתם. תוכן האתר שבאינדקס אינו מושפע, כך שהבוט ממשיך לעבוד ואין צורך בהטמעה מחדש."
+
+#: pandabot/admin/views/settings.php:537
+msgid "I understand this permanently deletes all chat history."
+msgstr "אני מבין/ה שפעולה זו מוחקת לצמיתות את כל היסטוריית הצ׳אט."
+
+#: pandabot/admin/views/settings.php:59
+msgid "Retention cleanup finished. %s conversations were past the retention window and have been deleted."
+msgstr "ניקוי הנתונים הסתיים. %s שיחות עברו את תקופת השמירה ונמחקו."
+
+#: pandabot/admin/views/settings.php:71
+msgid "All chat logs deleted (%s conversations). Indexed site content was left untouched."
+msgstr "כל יומני הצ׳אט נמחקו (%s שיחות). תוכן האתר שבאינדקס לא נפגע."
+
+#: pandabot/admin/views/settings.php:79
+msgid "Nothing was deleted — you need to tick the confirmation box first."
+msgstr "לא נמחק דבר — יש לסמן תחילה את תיבת האישור."
+
+#: pandabot/admin/views/settings.php:87
+msgid "Chat and embeddings are two independently configured OpenAI-compatible providers — some DeepSeek/OpenRouter-style endpoints only support one of the two. API keys are never displayed here and never sent to the browser; leave the key field blank to keep the currently saved key."
+msgstr "הצ׳אט וההטמעות הם שני ספקים תואמי-OpenAI שמוגדרים בנפרד — חלק מנקודות הקצה בסגנון DeepSeek/OpenRouter תומכות רק באחד מהם. מפתחות API לעולם אינם מוצגים כאן ואינם נשלחים לדפדפן; השאירו את שדה המפתח ריק כדי לשמור על המפתח הקיים."
+
+#: pandabot/admin/views/settings.php:94
+msgid "Chat provider"
+msgstr "ספק הצ׳אט"
+
+#: pandabot/admin/views/settings.php:97
+#: pandabot/admin/views/settings.php:135
+msgid "Base URL"
+msgstr "כתובת בסיס"
 
 #: pandabot/includes/class-pandabot-activator.php:31
 msgid "PandaBot requires PHP %1$s or higher. This server is running PHP %2$s. Please contact your host to upgrade, then reactivate the plugin."
@@ -1042,15 +1051,15 @@ msgstr ""
 msgid "מקלידה…"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:175
+#: pandabot/public/class-pandabot-widget.php:176
 msgid "לתיאום שיחת היכרות"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:181
+#: pandabot/public/class-pandabot-widget.php:183
 msgid "התקשרו"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:187
+#: pandabot/public/class-pandabot-widget.php:189
 msgid "וואטסאפ"
 msgstr ""
 

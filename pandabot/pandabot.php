@@ -3,7 +3,7 @@
  * Plugin Name:       PandaBot
  * Plugin URI:        https://pandakids-clinic.co.il/
  * Description:       Self-hosted RAG chatbot for the clinic site — answers from site content, books calls, never gives medical advice.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Panda Kids Clinic
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'PANDABOT_VERSION', '1.0.0' );
+define( 'PANDABOT_VERSION', '1.1.0' );
 define( 'PANDABOT_DB_VERSION', '1' );
 define( 'PANDABOT_PLUGIN_FILE', __FILE__ );
 define( 'PANDABOT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
@@ -29,6 +29,21 @@ define( 'PANDABOT_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
  * shared-hosting box on an old PHP doesn't get a hard fatal.
  */
 define( 'PANDABOT_MIN_PHP', '7.4' );
+
+/**
+ * Optional per-site values baked in at build time by build.sh from a
+ * gitignored pandabot.config.json, so one clinic's real phone number never
+ * has to live in shared source. Absent in the repository and in any plain
+ * checkout — the plugin runs fine without it, falling back to whatever is
+ * configured on the settings screen.
+ *
+ * It only ever defines the constants in Pandabot_Settings::constant_map(),
+ * and defining a constant twice is a PHP notice, so this must load before
+ * anything reads settings.
+ */
+if ( file_exists( PANDABOT_PLUGIN_DIR . 'site-config.php' ) ) {
+	require_once PANDABOT_PLUGIN_DIR . 'site-config.php';
+}
 
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-activator.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-settings.php';

@@ -170,10 +170,12 @@ class Pandabot_Widget {
 
 			<template data-pandabot="tpl-cta">
 				<div class="pandabot-cta">
-					<a class="pandabot-cta-primary" href="<?php echo esc_url( $contact['booking_url'] ); ?>" data-pandabot-event="cta_click_booking">
-						<?php echo self::icon( 'calendar' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?>
-						<?php esc_html_e( 'לתיאום שיחת היכרות', 'pandabot' ); ?>
-					</a>
+					<?php if ( ! empty( $contact['booking_url'] ) ) : ?>
+						<a class="pandabot-cta-primary" href="<?php echo esc_url( $contact['booking_url'] ); ?>" data-pandabot-event="cta_click_booking">
+							<?php echo self::icon( 'calendar' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?>
+							<?php esc_html_e( 'לתיאום שיחת היכרות', 'pandabot' ); ?>
+						</a>
+					<?php endif; ?>
 					<div class="pandabot-cta-row">
 						<?php if ( ! empty( $contact['phone'] ) ) : ?>
 							<a class="pandabot-cta-sec" href="tel:<?php echo esc_attr( Pandabot_Settings::tel_digits( $contact['phone'] ) ); ?>" data-pandabot-event="cta_click_phone">

@@ -9,6 +9,26 @@ $emb        = $settings['embeddings_provider'];
 $post_types = get_post_types( array( 'public' => true ), 'objects' );
 unset( $post_types['attachment'] );
 
+/**
+ * Fields backed by a wp-config.php constant are shown locked: the constant
+ * always wins at read time, so an editable box here would just be a lie.
+ * A disabled input posts nothing, which is also what stops the save path
+ * from copying the constant's value into the database.
+ */
+if ( ! function_exists( 'pandabot_lock_note' ) ) {
+	function pandabot_lock_note( $group, $key ) {
+		$constant = Pandabot_Settings::overridden_by( $group, $key );
+		if ( ! $constant ) {
+			return '';
+		}
+		return '<p class="description pandabot-locked">' . sprintf(
+			/* translators: %s: PHP constant name */
+			esc_html__( 'Set in wp-config.php as %s — change it there, not here.', 'pandabot' ),
+			'<code>' . esc_html( $constant ) . '</code>'
+		) . '</p>';
+	}
+}
+
 $privacy_data = Pandabot_Privacy::data_summary();
 $date_format  = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
 
@@ -77,22 +97,27 @@ $notice_n = isset( $_GET['pandabot_n'] ) ? (int) $_GET['pandabot_n'] : 0;
 					<th><label for="chat_base_url"><?php esc_html_e( 'Base URL', 'pandabot' ); ?></label></th>
 					<td>
 						<input type="url" id="chat_base_url" class="regular-text" placeholder="https://api.example.com/v1"
-							name="pandabot_settings[chat_provider][base_url]" value="<?php echo esc_attr( $chat['base_url'] ); ?>">
+							name="pandabot_settings[chat_provider][base_url]" value="<?php echo esc_attr( $chat['base_url'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'chat_provider', 'base_url' ) ); ?>>
+						<?php echo pandabot_lock_note( 'chat_provider', 'base_url' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 					</td>
 				</tr>
 				<tr>
 					<th><label for="chat_model"><?php esc_html_e( 'Model', 'pandabot' ); ?></label></th>
 					<td>
 						<input type="text" id="chat_model" class="regular-text"
-							name="pandabot_settings[chat_provider][model]" value="<?php echo esc_attr( $chat['model'] ); ?>">
+							name="pandabot_settings[chat_provider][model]" value="<?php echo esc_attr( $chat['model'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'chat_provider', 'model' ) ); ?>>
+						<?php echo pandabot_lock_note( 'chat_provider', 'model' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 					</td>
 				</tr>
 				<tr>
 					<th><label for="chat_api_key"><?php esc_html_e( 'API key', 'pandabot' ); ?></label></th>
 					<td>
+						<?php $chat_key_locked = (bool) Pandabot_Settings::overridden_by( 'chat_provider', 'api_key' ); ?>
 						<input type="password" id="chat_api_key" class="regular-text" autocomplete="new-password"
 							name="pandabot_settings[chat_provider][api_key]" value=""
-							placeholder="<?php echo $chat['api_key'] ? esc_attr__( '•••••••• (מפתח קיים — השאירו ריק כדי לשמור)', 'pandabot' ) : esc_attr__( 'לא הוגדר', 'pandabot' ); ?>">
+							<?php disabled( $chat_key_locked ); ?>
+							placeholder="<?php echo $chat_key_locked ? esc_attr__( 'מוגדר ב-wp-config.php', 'pandabot' ) : ( $chat['api_key'] ? esc_attr__( '•••••••• (מפתח קיים — השאירו ריק כדי לשמור)', 'pandabot' ) : esc_attr__( 'לא הוגדר', 'pandabot' ) ); ?>">
+						<?php echo pandabot_lock_note( 'chat_provider', 'api_key' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 					</td>
 				</tr>
 				<tr>
@@ -110,22 +135,27 @@ $notice_n = isset( $_GET['pandabot_n'] ) ? (int) $_GET['pandabot_n'] : 0;
 					<th><label for="emb_base_url"><?php esc_html_e( 'Base URL', 'pandabot' ); ?></label></th>
 					<td>
 						<input type="url" id="emb_base_url" class="regular-text" placeholder="https://api.openai.com/v1"
-							name="pandabot_settings[embeddings_provider][base_url]" value="<?php echo esc_attr( $emb['base_url'] ); ?>">
+							name="pandabot_settings[embeddings_provider][base_url]" value="<?php echo esc_attr( $emb['base_url'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'embeddings_provider', 'base_url' ) ); ?>>
+						<?php echo pandabot_lock_note( 'embeddings_provider', 'base_url' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 					</td>
 				</tr>
 				<tr>
 					<th><label for="emb_model"><?php esc_html_e( 'Model', 'pandabot' ); ?></label></th>
 					<td>
 						<input type="text" id="emb_model" class="regular-text" placeholder="text-embedding-3-small"
-							name="pandabot_settings[embeddings_provider][model]" value="<?php echo esc_attr( $emb['model'] ); ?>">
+							name="pandabot_settings[embeddings_provider][model]" value="<?php echo esc_attr( $emb['model'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'embeddings_provider', 'model' ) ); ?>>
+						<?php echo pandabot_lock_note( 'embeddings_provider', 'model' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 					</td>
 				</tr>
 				<tr>
 					<th><label for="emb_api_key"><?php esc_html_e( 'API key', 'pandabot' ); ?></label></th>
 					<td>
+						<?php $emb_key_locked = (bool) Pandabot_Settings::overridden_by( 'embeddings_provider', 'api_key' ); ?>
 						<input type="password" id="emb_api_key" class="regular-text" autocomplete="new-password"
 							name="pandabot_settings[embeddings_provider][api_key]" value=""
-							placeholder="<?php echo $emb['api_key'] ? esc_attr__( '•••••••• (מפתח קיים — השאירו ריק כדי לשמור)', 'pandabot' ) : esc_attr__( 'לא הוגדר', 'pandabot' ); ?>">
+							<?php disabled( $emb_key_locked ); ?>
+							placeholder="<?php echo $emb_key_locked ? esc_attr__( 'מוגדר ב-wp-config.php', 'pandabot' ) : ( $emb['api_key'] ? esc_attr__( '•••••••• (מפתח קיים — השאירו ריק כדי לשמור)', 'pandabot' ) : esc_attr__( 'לא הוגדר', 'pandabot' ) ); ?>">
+						<?php echo pandabot_lock_note( 'embeddings_provider', 'api_key' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 					</td>
 				</tr>
 				<tr>
@@ -345,30 +375,36 @@ $notice_n = isset( $_GET['pandabot_n'] ) ? (int) $_GET['pandabot_n'] : 0;
 			<table class="form-table" role="presentation">
 				<tr>
 					<th><label for="ct_booking"><?php esc_html_e( 'Booking URL', 'pandabot' ); ?></label></th>
-					<td><input type="text" id="ct_booking" class="regular-text" name="pandabot_settings[contact][booking_url]" value="<?php echo esc_attr( $settings['contact']['booking_url'] ); ?>"></td>
+					<td><input type="text" id="ct_booking" class="regular-text" name="pandabot_settings[contact][booking_url]" value="<?php echo esc_attr( $settings['contact']['booking_url'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'contact', 'booking_url' ) ); ?>>
+						<?php echo pandabot_lock_note( 'contact', 'booking_url' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?></td>
 				</tr>
 				<tr>
 					<th><label for="ct_phone"><?php esc_html_e( 'Phone', 'pandabot' ); ?></label></th>
-					<td><input type="text" id="ct_phone" class="regular-text" name="pandabot_settings[contact][phone]" value="<?php echo esc_attr( $settings['contact']['phone'] ); ?>"></td>
+					<td><input type="text" id="ct_phone" class="regular-text" name="pandabot_settings[contact][phone]" value="<?php echo esc_attr( $settings['contact']['phone'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'contact', 'phone' ) ); ?>>
+						<?php echo pandabot_lock_note( 'contact', 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?></td>
 				</tr>
 				<tr>
 					<th><label for="ct_whatsapp"><?php esc_html_e( 'WhatsApp number', 'pandabot' ); ?></label></th>
 					<td>
-						<input type="text" id="ct_whatsapp" class="regular-text" name="pandabot_settings[contact][whatsapp]" value="<?php echo esc_attr( $settings['contact']['whatsapp'] ); ?>">
+						<input type="text" id="ct_whatsapp" class="regular-text" name="pandabot_settings[contact][whatsapp]" value="<?php echo esc_attr( $settings['contact']['whatsapp'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'contact', 'whatsapp' ) ); ?>>
+						<?php echo pandabot_lock_note( 'contact', 'whatsapp' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?>
 						<p class="description"><?php esc_html_e( 'International format without + or dashes, e.g. 972546657207. Leave empty to hide the WhatsApp button.', 'pandabot' ); ?></p>
 					</td>
 				</tr>
 				<tr>
 					<th><label for="ct_email"><?php esc_html_e( 'Email', 'pandabot' ); ?></label></th>
-					<td><input type="text" id="ct_email" class="regular-text" name="pandabot_settings[contact][email]" value="<?php echo esc_attr( $settings['contact']['email'] ); ?>"></td>
+					<td><input type="text" id="ct_email" class="regular-text" name="pandabot_settings[contact][email]" value="<?php echo esc_attr( $settings['contact']['email'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'contact', 'email' ) ); ?>>
+						<?php echo pandabot_lock_note( 'contact', 'email' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?></td>
 				</tr>
 				<tr>
 					<th><label for="ct_address"><?php esc_html_e( 'Address', 'pandabot' ); ?></label></th>
-					<td><input type="text" id="ct_address" class="regular-text" dir="rtl" name="pandabot_settings[contact][address]" value="<?php echo esc_attr( $settings['contact']['address'] ); ?>"></td>
+					<td><input type="text" id="ct_address" class="regular-text" dir="rtl" name="pandabot_settings[contact][address]" value="<?php echo esc_attr( $settings['contact']['address'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'contact', 'address' ) ); ?>>
+						<?php echo pandabot_lock_note( 'contact', 'address' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?></td>
 				</tr>
 				<tr>
 					<th><label for="ct_privacy"><?php esc_html_e( 'Privacy policy URL', 'pandabot' ); ?></label></th>
-					<td><input type="text" id="ct_privacy" class="regular-text" name="pandabot_settings[contact][privacy_url]" value="<?php echo esc_attr( $settings['contact']['privacy_url'] ); ?>"></td>
+					<td><input type="text" id="ct_privacy" class="regular-text" name="pandabot_settings[contact][privacy_url]" value="<?php echo esc_attr( $settings['contact']['privacy_url'] ); ?>" <?php disabled( (bool) Pandabot_Settings::overridden_by( 'contact', 'privacy_url' ) ); ?>>
+						<?php echo pandabot_lock_note( 'contact', 'privacy_url' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- markup built and escaped in the helper. ?></td>
 				</tr>
 			</table>
 

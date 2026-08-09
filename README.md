@@ -65,17 +65,58 @@ evidence-based answer to "what should I write next?"
 See [`pandabot/readme.txt`](pandabot/readme.txt) for install steps, tuning advice
 and an FAQ covering the problems that actually came up during this build.
 
-Build the installable zip with:
+## Building
 
 ```bash
-zip -rq pandabot.zip pandabot -x "*.DS_Store"
+./build.sh
 ```
+
+That produces `pandabot.zip`, ready to upload via **Plugins → Add New → Upload
+Plugin**.
+
+### Keeping per-site values out of the repository
+
+No phone number, address or email is hardcoded in the source — those are per-site
+details, not product defaults, and shipping one clinic's contact info to every
+install would be wrong. Instead:
+
+```bash
+cp pandabot.config.example.json pandabot.config.json
+$EDITOR pandabot.config.json   # your real values
+./build.sh
+```
+
+`pandabot.config.json` is gitignored. `build.sh` reads it and generates
+`pandabot/site-config.php` **into a throwaway copy** of the plugin, so the zip
+carries your values while your working tree and the repository stay clean. Run
+`./build.sh` with no config file and you get a perfectly functional generic zip
+— everything is still editable in the WordPress admin.
+
+Those generated constants win over the database at read time, and the settings
+screen shows each affected field as locked with the constant's name, so there's
+never a box that looks editable but isn't.
+
+### A note on API keys
+
+`build.sh` will bake in an API key if you insist, and warns loudly when you do.
+Don't. A key baked into the zip lives in a PHP file inside your web root and
+travels with every copy of that zip. Put keys in the WordPress admin (they go to
+the database, never to the browser) or in `wp-config.php` — see
+[`pandabot/config-sample.php`](pandabot/config-sample.php) for the constants.
+
+**A `.env` file inside the plugin folder is the one option to avoid.** It sits in
+the web root, and unless your webserver explicitly blocks dotfiles,
+`https://your-site.com/wp-content/plugins/pandabot/.env` hands out your key as
+plain text. It also gets deleted by the next plugin update. `wp-config.php` has
+neither problem.
 
 ## Repository layout
 
 | Path | What it is |
 |---|---|
 | `pandabot/` | The plugin |
+| `build.sh` | Builds the zip, optionally baking in per-site values |
+| `pandabot.config.example.json` | Template for your gitignored `pandabot.config.json` |
 | `pandakids-chatbot-plugin-plan.md` | Architecture plan — the spec the code was built against |
 | `pandabot-widget-mockup.html` | Standalone visual mockup and the source of the widget's Hebrew copy |
 

@@ -337,7 +337,7 @@ class Pandabot_Rest {
 		$top_k      = max( 1, (int) $request->get_param( 'top_k' ) );
 		$max_tokens = max( 50, min( 4000, (int) $request->get_param( 'max_tokens' ) ) );
 
-		$all                     = Pandabot_Settings::get_all();
+		$all                     = Pandabot_Settings::get_all_raw();
 		$all['similarity_floor'] = $floor;
 		$all['top_k']            = $top_k;
 		$all['max_tokens']       = $max_tokens;
@@ -501,7 +501,7 @@ class Pandabot_Rest {
 			$dimension = $vector ? count( $vector ) : null;
 
 			if ( $dimension ) {
-				$all = Pandabot_Settings::get_all();
+				$all = Pandabot_Settings::get_all_raw();
 				$all['embeddings_provider']['dimension'] = $dimension;
 				Pandabot_Settings::save_all( $all );
 			}

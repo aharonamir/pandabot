@@ -178,9 +178,27 @@ class Pandabot_Chat {
 		// Same settings the widget's CTA buttons are built from, so the
 		// number the bot says out loud and the number the button dials can
 		// never drift apart.
-		$contact       = $settings['contact'];
-		$contact_facts = "\n\nפרטי יצירת קשר קבועים של הקליניקה (מדויקים תמיד, להשתמש בהם בכל תשובה שמפנה ליצירת קשר):" .
-			"\nטלפון: {$contact['phone']}\nאימייל: {$contact['email']}\nכתובת: {$contact['address']}\nתיאום שיחת היכרות: {$contact['booking_url']}";
+		$contact = $settings['contact'];
+
+		// Only state channels that are actually configured. Feeding the model
+		// "טלפון: " with nothing after it invites it to invent a number.
+		$labels = array(
+			'phone'       => 'טלפון',
+			'email'       => 'אימייל',
+			'address'     => 'כתובת',
+			'booking_url' => 'תיאום שיחת היכרות',
+		);
+
+		$lines = array();
+		foreach ( $labels as $key => $label ) {
+			if ( ! empty( $contact[ $key ] ) ) {
+				$lines[] = "\n{$label}: {$contact[ $key ]}";
+			}
+		}
+
+		$contact_facts = $lines
+			? "\n\nפרטי יצירת קשר קבועים של הקליניקה (מדויקים תמיד, להשתמש בהם בכל תשובה שמפנה ליצירת קשר):" . implode( '', $lines )
+			: '';
 
 		$system_full = $settings['system_prompt'] . $contact_facts;
 

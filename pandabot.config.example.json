@@ -1,0 +1,36 @@
+{
+  "_comment": [
+    "Copy this file to pandabot.config.json and fill in your real values.",
+    "pandabot.config.json is gitignored — it never reaches the repository.",
+    "build.sh bakes these into the zip as pandabot/site-config.php.",
+    "Any key left empty is skipped entirely and the setting stays editable",
+    "in the WordPress admin as normal."
+  ],
+
+  "contact": {
+    "booking_url": "/make-appointments/",
+    "phone": "054-0000000",
+    "whatsapp": "972540000000",
+    "email": "info@example.com",
+    "address": "Street 1, Town",
+    "privacy_url": ""
+  },
+
+  "_comment_providers": [
+    "Base URL and model are safe to bake in. API KEYS ARE NOT: a value here",
+    "ends up in a PHP file inside your web root and inside the zip itself,",
+    "so anyone you hand the zip to gets your key. Leave them empty and set",
+    "keys either in the WordPress admin or as wp-config.php constants —",
+    "see pandabot/config-sample.php.",
+    "build.sh warns loudly if you fill one in anyway."
+  ],
+
+  "providers": {
+    "chat_base_url": "",
+    "chat_model": "",
+    "chat_api_key": "",
+    "embeddings_base_url": "",
+    "embeddings_model": "",
+    "embeddings_api_key": ""
+  }
+}

@@ -1,6 +1,13 @@
-# Build artifact — rebuild with:
-#   zip -rq pandabot.zip pandabot -x "*.DS_Store"
-# Distributed as a GitHub Release attachment rather than tracked here.
+# Per-site values — your real phone number, address, and any keys.
+# Copy pandabot.config.example.json to pandabot.config.json and fill it in;
+# build.sh bakes it into the zip. This file must never be committed.
+pandabot.config.json
+
+# Generated into the throwaway build copy by build.sh, never into the source
+# tree. Listed anyway so a stray one can't be committed by accident.
+pandabot/site-config.php
+
+# Build artifact — rebuild with ./build.sh
 pandabot.zip
 
 .DS_Store
