@@ -4,14 +4,23 @@
 #
 #   ./build.sh                          # generic zip, no site values
 #   ./build.sh pandabot.config.json     # zip with your values baked in
+#   ./build.sh --bump 1.3.0             # set the version everywhere, then build
 #
 # With no argument it uses pandabot.config.json if that file exists, so the
 # usual case is just ./build.sh. Values come from a gitignored config file so
 # the repository itself never carries one clinic's phone number.
 #
-# The plugin source is never modified: the build runs against a throwaway copy
-# in a temp directory. A wrong config can only produce a bad zip, never a
-# dirty working tree.
+# The version lives in three places that must agree: the plugin header (the
+# only one WordPress parses), the PANDABOT_VERSION constant (which cache-busts
+# the CSS/JS URLs), and readme.txt's Stable tag. If they drift, the Plugins
+# list shows the new version while browsers keep serving assets cached under
+# the old one — an update that looks applied but visibly isn't. Every build
+# checks them, and --bump writes all three at once.
+#
+# Baking config never touches the plugin source: that runs against a throwaway
+# copy in a temp directory, so a wrong config can only produce a bad zip, never
+# a dirty working tree. --bump is the one exception — it edits the tracked
+# files on purpose, so review it with git diff like any other change.
 
 set -euo pipefail
 
@@ -19,11 +28,85 @@ cd "$(dirname "$0")"
 
 PLUGIN_DIR="pandabot"
 OUT_ZIP="pandabot.zip"
-CONFIG="${1:-pandabot.config.json}"
+BUMP=""
+CONFIG=""
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+		--bump)   BUMP="${2:-}"; shift 2 ;;
+		--bump=*) BUMP="${1#*=}"; shift ;;
+		-h|--help)
+			sed -n '2,25p' "$0" | sed 's/^# \{0,1\}//'
+			exit 0
+			;;
+		-*) echo "unknown option: $1" >&2; exit 1 ;;
+		*)  CONFIG="$1"; shift ;;
+	esac
+done
+
+CONFIG="${CONFIG:-pandabot.config.json}"
 
 command -v python3 >/dev/null || { echo "build.sh needs python3" >&2; exit 1; }
 command -v zip     >/dev/null || { echo "build.sh needs zip" >&2; exit 1; }
 [ -d "$PLUGIN_DIR" ] || { echo "no $PLUGIN_DIR/ directory here" >&2; exit 1; }
+
+if [ -n "$BUMP" ]; then
+	python3 - "$BUMP" "$PLUGIN_DIR/pandabot.php" "$PLUGIN_DIR/readme.txt" <<'PY'
+import re, sys
+
+version, plugin_file, readme_file = sys.argv[1], sys.argv[2], sys.argv[3]
+
+if not re.fullmatch(r'\d+\.\d+\.\d+', version):
+    sys.exit(f"--bump needs a version like 1.3.0, got '{version}'")
+
+php = open(plugin_file, encoding='utf-8').read()
+# Keep the header's column alignment: replace only the value.
+php, n_header = re.subn(r'(^ \* Version: *)\S+$', r'\g<1>' + version, php, count=1, flags=re.M)
+php, n_const = re.subn(r"(define\( 'PANDABOT_VERSION', ')[^']+(' \);)",
+                       r'\g<1>' + version + r'\g<2>', php, count=1)
+if n_header != 1 or n_const != 1:
+    sys.exit(f"could not rewrite version in {plugin_file} "
+             f"(header:{n_header} constant:{n_const}) — nothing changed")
+open(plugin_file, 'w', encoding='utf-8').write(php)
+
+readme = open(readme_file, encoding='utf-8').read()
+readme, n_tag = re.subn(r'(^Stable tag: *)\S+$', r'\g<1>' + version, readme, count=1, flags=re.M)
+if n_tag != 1:
+    sys.exit(f"could not rewrite Stable tag in {readme_file} — plugin file already changed")
+open(readme_file, 'w', encoding='utf-8').write(readme)
+
+print(f"Bumped to {version} (header, PANDABOT_VERSION, Stable tag)")
+PY
+fi
+
+# Run on every build, not just after --bump: the usual way these drift is a
+# hand-edit that touched one of them.
+python3 - "$PLUGIN_DIR/pandabot.php" "$PLUGIN_DIR/readme.txt" <<'PY'
+import re, sys
+
+plugin_file, readme_file = sys.argv[1], sys.argv[2]
+php = open(plugin_file, encoding='utf-8').read()
+readme = open(readme_file, encoding='utf-8').read()
+
+def grab(pattern, text, label):
+    m = re.search(pattern, text, re.M)
+    if not m:
+        sys.exit(f"could not find the {label}")
+    return m.group(1)
+
+found = {
+    'plugin header':    grab(r'^ \* Version: *(\S+)$', php, 'plugin header version'),
+    'PANDABOT_VERSION': grab(r"define\( 'PANDABOT_VERSION', '([^']+)' \);", php, 'PANDABOT_VERSION constant'),
+    'readme Stable tag': grab(r'^Stable tag: *(\S+)$', readme, 'readme Stable tag'),
+}
+
+if len(set(found.values())) != 1:
+    print("Version mismatch — refusing to build:", file=sys.stderr)
+    for where, value in found.items():
+        print(f"  {where:<18} {value}", file=sys.stderr)
+    print("\nFix them by hand, or run: ./build.sh --bump <version>", file=sys.stderr)
+    sys.exit(1)
+PY
 
 BUILD_ROOT="$(mktemp -d)"
 trap 'rm -rf "$BUILD_ROOT"' EXIT

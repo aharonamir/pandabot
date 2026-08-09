@@ -74,6 +74,22 @@ and an FAQ covering the problems that actually came up during this build.
 That produces `pandabot.zip`, ready to upload via **Plugins → Add New → Upload
 Plugin**.
 
+### Releasing a new version
+
+```bash
+./build.sh --bump 1.3.0
+```
+
+The version lives in three places: the plugin header (the only one WordPress
+parses), the `PANDABOT_VERSION` constant (which cache-busts the CSS/JS URLs),
+and `readme.txt`'s `Stable tag`. `--bump` writes all three, and **every** build
+verifies they agree and refuses to run if they don't.
+
+That check exists because the failure is quiet: if the header says 1.3.0 while
+the constant still says 1.2.0, the Plugins list shows the update as applied
+while browsers keep serving assets cached under the old version — so the new
+CSS never appears and nothing looks broken enough to investigate.
+
 ### Keeping per-site values out of the repository
 
 No phone number, address or email is hardcoded in the source — those are per-site
