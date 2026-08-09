@@ -704,6 +704,20 @@
 	animation: pandabot-fade .15s ease;
 }
 
+/* The tooltip floats 8px above the chip, and that strip is inside neither
+   element — so moving the pointer up to click "ראה מקור" left .pandabot-source
+   entirely and mouseleave closed the tooltip before it could be reached. This
+   invisible bridge extends the tooltip's hit area down across the gap. A
+   pseudo-element counts as part of its element for hit-testing, so the pointer
+   never leaves the tooltip, and no hide-delay timer is needed. */
+#pandabot-root .pandabot-source-tip::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	inset-inline: 0;
+	height: 10px;
+}
+
 #pandabot-root .pandabot-source-title {
 	font-size: 12px;
 	font-weight: 600;
