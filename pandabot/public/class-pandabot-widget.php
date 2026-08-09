@@ -86,6 +86,9 @@ class Pandabot_Widget {
 			data-rest-url="<?php echo esc_url( rest_url( 'pandabot/v1/' ) ); ?>"
 			data-nonce="<?php echo esc_attr( wp_create_nonce( self::NONCE_ACTION ) ); ?>"
 			data-error-text="<?php echo esc_attr( $settings['generic_error_message'] ); ?>"
+			data-sources-label="<?php esc_attr_e( 'מקורות', 'pandabot' ); ?>"
+			data-source-link="<?php esc_attr_e( 'ראה מקור', 'pandabot' ); ?>"
+			data-source-aria="<?php esc_attr_e( 'מקור %d — הצגת הציטוט', 'pandabot' ); ?>"
 			data-auto-open="<?php echo esc_attr( (int) $ui['auto_open_delay'] ); ?>">
 
 			<div class="pandabot-launcher" data-pandabot="launcher">

@@ -7,8 +7,10 @@ pandabot.config.json
 # tree. Listed anyway so a stray one can't be committed by accident.
 pandabot/site-config.php
 
-# Build artifact — rebuild with ./build.sh
-pandabot.zip
+# Build artifacts — rebuild with ./build.sh. A built zip can contain a
+# generated site-config.php with real contact details, so every zip in this
+# directory stays out of the repository, whatever it is named.
+*.zip
 
 .DS_Store
 Thumbs.db

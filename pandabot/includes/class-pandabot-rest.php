@@ -286,12 +286,20 @@ class Pandabot_Rest {
 			);
 		}
 
+		// Sources only when the answer really came from them. Any guardrail
+		// action means the reply is a boundary or a fallback, not something
+		// the retrieved pages support — see Pandabot_Chat::sources_from().
+		$sources = ( 'none' === $result['guardrail_action'] )
+			? Pandabot_Chat::sources_from( $result['chunks'], 3 )
+			: array();
+
 		return new WP_REST_Response(
 			array(
 				'success'          => true,
 				'answer'           => $result['answer'],
 				'guardrail_action' => $result['guardrail_action'],
 				'show_cta'         => $result['show_cta'],
+				'sources'          => $sources,
 			),
 			200
 		);

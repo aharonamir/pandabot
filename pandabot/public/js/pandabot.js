@@ -17,6 +17,9 @@
 	var restUrl = root.getAttribute('data-rest-url');
 	var nonce = root.getAttribute('data-nonce');
 	var errorText = root.getAttribute('data-error-text');
+	var sourcesLabel = root.getAttribute('data-sources-label');
+	var sourceLinkText = root.getAttribute('data-source-link');
+	var sourceAria = root.getAttribute('data-source-aria');
 	var autoOpen = parseInt(root.getAttribute('data-auto-open'), 10) || 0;
 
 	var panel = root.querySelector('#pandabot-panel');
@@ -142,6 +145,113 @@
 		scrollDown();
 	}
 
+	/**
+	 * Numbered citation chips under an answer. Built as buttons, not
+	 * hover-only affordances: on a phone there is no hover, so a tooltip that
+	 * only opens on mouseover would be unreachable for a large share of
+	 * visitors. Click/tap toggles, pointer hover also opens, and being a real
+	 * button makes it keyboard-reachable for free.
+	 */
+	function addSources(list) {
+		if (!list || !list.length) {
+			return;
+		}
+
+		var wrap = document.createElement('div');
+		wrap.className = 'pandabot-sources';
+
+		var label = document.createElement('span');
+		label.className = 'pandabot-sources-label';
+		label.textContent = sourcesLabel;
+		wrap.appendChild(label);
+
+		list.forEach(function (source, index) {
+			var item = document.createElement('span');
+			item.className = 'pandabot-source';
+
+			var chip = document.createElement('button');
+			chip.type = 'button';
+			chip.className = 'pandabot-source-chip';
+			chip.textContent = String(index + 1);
+			chip.setAttribute('aria-expanded', 'false');
+			chip.setAttribute('aria-label', sourceAria.replace('%d', String(index + 1)));
+
+			var tip = document.createElement('span');
+			tip.className = 'pandabot-source-tip';
+			tip.hidden = true;
+
+			var title = document.createElement('span');
+			title.className = 'pandabot-source-title';
+			title.textContent = source.title || '';
+			tip.appendChild(title);
+
+			var excerpt = document.createElement('span');
+			excerpt.className = 'pandabot-source-excerpt';
+			excerpt.textContent = source.excerpt || '';
+			tip.appendChild(excerpt);
+
+			if (source.url) {
+				var link = document.createElement('a');
+				link.className = 'pandabot-source-link';
+				link.href = source.url;
+				link.target = '_blank';
+				link.rel = 'noopener';
+				link.textContent = sourceLinkText;
+				tip.appendChild(link);
+			}
+
+			function setOpen(open) {
+				tip.hidden = !open;
+				chip.setAttribute('aria-expanded', open ? 'true' : 'false');
+				item.classList.toggle('is-open', open);
+			}
+
+			chip.addEventListener('click', function (event) {
+				event.stopPropagation();
+				var willOpen = tip.hidden;
+				closeAllTips();
+				setOpen(willOpen);
+			});
+
+			// Hover is an enhancement on top of click, never the only way in —
+			// and only on devices that genuinely hover. Touch browsers
+			// synthesize mouseenter just before click, so binding it
+			// unconditionally makes a tap open the tooltip and then instantly
+			// close it again.
+			if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+				item.addEventListener('mouseenter', function () {
+					closeAllTips();
+					setOpen(true);
+				});
+				item.addEventListener('mouseleave', function () {
+					setOpen(false);
+				});
+			}
+
+			item.appendChild(chip);
+			item.appendChild(tip);
+			wrap.appendChild(item);
+		});
+
+		body.appendChild(wrap);
+		scrollDown();
+	}
+
+	function closeAllTips() {
+		var open = body.querySelectorAll('.pandabot-source.is-open');
+		Array.prototype.forEach.call(open, function (item) {
+			item.classList.remove('is-open');
+			var tip = item.querySelector('.pandabot-source-tip');
+			var chip = item.querySelector('.pandabot-source-chip');
+			if (tip) {
+				tip.hidden = true;
+			}
+			if (chip) {
+				chip.setAttribute('aria-expanded', 'false');
+			}
+		});
+	}
+
 	function showTyping() {
 		var frag = tplTyping.content.cloneNode(true);
 		var el = frag.firstElementChild;
@@ -169,6 +279,7 @@
 				addGuard(entry.text);
 			} else {
 				addBubble(entry.text, entry.error ? 'error' : 'bot');
+				addSources(entry.sources);
 			}
 			if (entry.cta) {
 				addCta();
@@ -251,8 +362,25 @@
 	}
 
 	document.addEventListener('keydown', function (e) {
-		if (e.key === 'Escape' && !panel.hidden) {
+		if (e.key !== 'Escape') {
+			return;
+		}
+		// A tapped-open citation is the innermost thing on screen, so Escape
+		// dismisses that first rather than closing the whole conversation.
+		if (body.querySelector('.pandabot-source.is-open')) {
+			closeAllTips();
+			return;
+		}
+		if (!panel.hidden) {
 			closePanel();
+		}
+	});
+
+	// Tapping anywhere else dismisses an open citation — on touch there is no
+	// mouseleave to close it.
+	body.addEventListener('click', function (e) {
+		if (!e.target.closest('.pandabot-source')) {
+			closeAllTips();
 		}
 	});
 
@@ -304,16 +432,19 @@
 				var guard = GUARD_ACTIONS.indexOf(data.guardrail_action) !== -1;
 				var cta = !!data.show_cta;
 
+				var sources = (!guard && data.sources) ? data.sources : [];
+
 				if (guard) {
 					addGuard(data.answer);
 				} else {
 					addBubble(data.answer, 'bot');
+					addSources(sources);
 				}
 				if (cta) {
 					addCta();
 				}
 
-				remember({ role: 'bot', text: data.answer, guard: guard, cta: cta });
+				remember({ role: 'bot', text: data.answer, guard: guard, cta: cta, sources: sources });
 			})
 			.catch(function () {
 				typing.remove();

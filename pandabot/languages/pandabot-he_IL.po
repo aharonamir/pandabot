@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PandaBot\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 10:35+0000\n"
-"PO-Revision-Date: 2026-08-09 10:35+0000\n"
+"POT-Creation-Date: 2026-08-09 12:16+0000\n"
+"PO-Revision-Date: 2026-08-09 12:16+0000\n"
 "Last-Translator: Panda Kids Clinic\n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -998,75 +998,87 @@ msgstr "מזהה שיחה שגוי."
 msgid "Empty message."
 msgstr "הודעה ריקה."
 
-#: pandabot/includes/class-pandabot-rest.php:371
+#: pandabot/includes/class-pandabot-rest.php:379
 msgid "Message is empty."
 msgstr "ההודעה ריקה."
 
-#: pandabot/includes/class-pandabot-rest.php:391
+#: pandabot/includes/class-pandabot-rest.php:399
 msgid "Question and answer are both required."
 msgstr "יש להזין גם שאלה וגם תשובה."
 
-#: pandabot/includes/class-pandabot-rest.php:466
+#: pandabot/includes/class-pandabot-rest.php:474
 msgid "Base URL, API key, and model must all be set before testing."
 msgstr "יש להגדיר כתובת בסיס, מפתח API ומודל לפני הבדיקה."
 
-#: pandabot/includes/class-pandabot-rest.php:515
+#: pandabot/includes/class-pandabot-rest.php:523
 msgid "Success — vector dimension %1$d, %2$d ms."
 msgstr "הצלחה — ממד הווקטור %1$d, %2$d מ״ש."
 
-#: pandabot/includes/class-pandabot-rest.php:519
+#: pandabot/includes/class-pandabot-rest.php:527
 msgid "Provider responded but no embedding vector was found in the response."
 msgstr "הספק הגיב אך לא נמצא וקטור הטמעה בתשובה."
 
-#: pandabot/includes/class-pandabot-rest.php:535
+#: pandabot/includes/class-pandabot-rest.php:543
 msgid "Success — %d ms."
 msgstr "הצלחה — %d מ״ש."
 
-#: pandabot/includes/class-pandabot-rest.php:538
+#: pandabot/includes/class-pandabot-rest.php:546
 msgid "Provider responded but no message content was found in the response."
 msgstr "הספק הגיב אך לא נמצא תוכן הודעה בתשובה."
 
-#: pandabot/public/class-pandabot-widget.php:119
+#: pandabot/public/class-pandabot-widget.php:102
+msgid "הסתרת ההודעה"
+msgstr ""
+
+#: pandabot/public/class-pandabot-widget.php:122
 msgid "סגירת הצ'אט"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:140
+#: pandabot/public/class-pandabot-widget.php:143
 msgid "מדיניות פרטיות"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:150
+#: pandabot/public/class-pandabot-widget.php:153
 msgid "כתבו הודעה…"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:151
+#: pandabot/public/class-pandabot-widget.php:154
 msgid "הקלדת הודעה"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:152
+#: pandabot/public/class-pandabot-widget.php:155
 #: pandabot/admin/views/knowledge.php:198
 msgid "שליחה"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:159
+#: pandabot/public/class-pandabot-widget.php:162
 msgid "מקלידה…"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:176
+#: pandabot/public/class-pandabot-widget.php:179
 msgid "לתיאום שיחת היכרות"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:183
+#: pandabot/public/class-pandabot-widget.php:186
 msgid "התקשרו"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:189
+#: pandabot/public/class-pandabot-widget.php:192
 msgid "וואטסאפ"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:92
-msgid "פתיחת צ'אט"
+#: pandabot/public/class-pandabot-widget.php:89
+msgid "מקורות"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:99
-msgid "הסתרת ההודעה"
+#: pandabot/public/class-pandabot-widget.php:90
+msgid "ראה מקור"
+msgstr ""
+
+#: pandabot/public/class-pandabot-widget.php:91
+msgid "מקור %d — הצגת הציטוט"
+msgstr ""
+
+#: pandabot/public/class-pandabot-widget.php:95
+msgid "פתיחת צ'אט"
 msgstr ""

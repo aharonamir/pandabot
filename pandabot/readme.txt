@@ -4,7 +4,7 @@ Tags: chatbot, rag, hebrew, openai, chat
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,12 @@ clock, so a quiet site can lag by hours. You can run it by hand from Settings,
 or point a real cron job at `wp-cron.php`.
 
 == Changelog ==
+
+= 1.2.0 =
+* Answers now cite their sources: numbered chips under the reply, each opening
+  a tooltip with an excerpt of the retrieved text and a link to the page. Shown
+  only when the answer was genuinely grounded in retrieval — never on a
+  fallback or a guardrail response. Capped at three pages.
 
 = 1.1.0 =
 * Contact details are no longer hardcoded in the source. They can be supplied

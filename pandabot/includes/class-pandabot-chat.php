@@ -174,6 +174,52 @@ class Pandabot_Chat {
 	 * answers are always correct") + a user turn carrying the delimited
 	 * retrieved context ahead of the actual question.
 	 */
+	/**
+	 * Turn the chunks that actually fed the prompt into citation entries for
+	 * the widget: one per source page, best-scoring chunk first.
+	 *
+	 * Callers must only use this when the answer was genuinely grounded in
+	 * these chunks (guardrail_action === 'none'). A fallback or a medical
+	 * redirect still has a retrieval result sitting in memory, and attaching
+	 * it would cite pages that did not answer the question — borrowed
+	 * authority for a non-answer, which on a clinical site is worse than
+	 * showing no sources at all.
+	 *
+	 * @return array<int, array{title:string, url:string, excerpt:string}>
+	 */
+	public static function sources_from( array $chunks, $limit = 3 ) {
+		$by_url = array();
+
+		foreach ( $chunks as $chunk ) {
+			$url = isset( $chunk['source_url'] ) ? trim( (string) $chunk['source_url'] ) : '';
+			if ( '' === $url ) {
+				continue;
+			}
+			// Chunks arrive similarity-ordered, so the first hit for a page is
+			// its best one — several chunks from one page collapse to a single
+			// citation rather than three chips pointing at the same URL.
+			if ( isset( $by_url[ $url ] ) ) {
+				continue;
+			}
+
+			$title = isset( $chunk['title'] ) ? trim( (string) $chunk['title'] ) : '';
+
+			$by_url[ $url ] = array(
+				'title'   => ( '' !== $title ) ? $title : $url,
+				'url'     => $url,
+				// Chunks run to a couple of thousand characters; a tooltip
+				// needs a taste, and the link covers the rest.
+				'excerpt' => wp_html_excerpt( (string) $chunk['content'], 200, '…' ),
+			);
+
+			if ( count( $by_url ) >= $limit ) {
+				break;
+			}
+		}
+
+		return array_values( $by_url );
+	}
+
 	private function build_messages( array $settings, $context, $user_message ) {
 		// Same settings the widget's CTA buttons are built from, so the
 		// number the bot says out loud and the number the button dials can

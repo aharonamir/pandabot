@@ -627,6 +627,110 @@
 }
 
 
+/* ---------- Source citations ----------
+   Numbered chips under a grounded answer. The tooltip is a real element
+   toggled by JS rather than a CSS :hover-only construct, because :hover
+   never fires on touch and these must be reachable on a phone. */
+
+#pandabot-root .pandabot-sources {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-self: flex-start;
+	margin: -2px 0 2px;
+	padding-inline-start: 2px;
+	animation: pandabot-fade .3s ease;
+}
+
+#pandabot-root .pandabot-sources-label {
+	font-size: 11.5px;
+	color: var(--pandabot-muted, #6b7280);
+}
+
+#pandabot-root .pandabot-source {
+	position: relative;
+	display: inline-flex;
+}
+
+#pandabot-root .pandabot-source-chip {
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	border-radius: 50%;
+	border: 1px solid var(--pandabot-soft, #d8e6e1);
+	background: var(--pandabot-tint, #f0f6f4);
+	color: var(--pandabot-accent, #0F6E56);
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background .15s ease, border-color .15s ease;
+}
+
+#pandabot-root .pandabot-source-chip:hover,
+#pandabot-root .pandabot-source-chip[aria-expanded="true"] {
+	background: var(--pandabot-accent, #0F6E56);
+	border-color: var(--pandabot-accent, #0F6E56);
+	color: #fff;
+}
+
+#pandabot-root .pandabot-source-chip:focus-visible {
+	outline: 2px solid var(--pandabot-accent, #0F6E56);
+	outline-offset: 2px;
+}
+
+/* Anchored to the panel edge rather than the chip, so a tooltip near the
+   panel's side can never overflow it. */
+#pandabot-root .pandabot-source-tip {
+	position: absolute;
+	bottom: calc(100% + 8px);
+	inset-inline-start: -8px;
+	width: max-content;
+	max-width: min(260px, calc(100vw - 48px));
+	z-index: 3;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	padding: 9px 11px;
+	border-radius: 12px;
+	border: 1px solid var(--pandabot-soft, #d8e6e1);
+	background: #fff;
+	box-shadow: 0 8px 24px rgba(16, 40, 34, .16);
+	text-align: start;
+	animation: pandabot-fade .15s ease;
+}
+
+#pandabot-root .pandabot-source-title {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--pandabot-ink, #14211d);
+}
+
+#pandabot-root .pandabot-source-excerpt {
+	font-size: 11.5px;
+	line-height: 1.55;
+	color: var(--pandabot-muted, #6b7280);
+}
+
+#pandabot-root .pandabot-source-link {
+	font-size: 11.5px;
+	font-weight: 600;
+	color: var(--pandabot-accent, #0F6E56);
+	text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+	#pandabot-root .pandabot-source-tip {
+		inset-inline-start: auto;
+		inset-inline-end: auto;
+		max-width: calc(100vw - 40px);
+	}
+}
+
 /* ---------- Theme armour ----------
  *
  * Themes routinely style bare <button>/<a> elements with !important, which
@@ -702,4 +806,33 @@
 	line-height: normal !important;
 	height: auto !important;
 	margin: 0 !important;
+}
+
+/* Citation chips are <button type="button">, which is precisely the selector
+   the medicate theme forces white text onto — without this the numbers
+   disappear against the tint, the same failure the launcher and chips hit. */
+#pandabot-root .pandabot-source-chip {
+	background: var(--pandabot-tint) !important;
+	color: var(--pandabot-accent) !important;
+	border: 1px solid var(--pandabot-soft) !important;
+	border-radius: 50% !important;
+	padding: 0 !important;
+	width: 20px !important;
+	height: 20px !important;
+}
+
+#pandabot-root .pandabot-source-chip:hover,
+#pandabot-root .pandabot-source-chip[aria-expanded="true"] {
+	background: var(--pandabot-accent) !important;
+	color: #fff !important;
+	border-color: var(--pandabot-accent) !important;
+}
+
+#pandabot-root .pandabot-source-tip {
+	background: #fff !important;
+}
+
+#pandabot-root .pandabot-source-link {
+	color: var(--pandabot-accent) !important;
+	text-decoration: underline !important;
 }
