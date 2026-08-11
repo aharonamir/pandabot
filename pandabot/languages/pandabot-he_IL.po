@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PandaBot\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-09 12:52+0000\n"
-"PO-Revision-Date: 2026-08-09 12:52+0000\n"
+"POT-Creation-Date: 2026-08-11 16:17+0000\n"
+"PO-Revision-Date: 2026-08-11 16:17+0000\n"
 "Last-Translator: Panda Kids Clinic\n"
 "Language-Team: Hebrew\n"
 "Language: he_IL\n"
@@ -1022,45 +1022,45 @@ msgstr "הצלחה — %d מ״ש."
 msgid "Provider responded but no message content was found in the response."
 msgstr "הספק הגיב אך לא נמצא תוכן הודעה בתשובה."
 
-#: pandabot/public/class-pandabot-widget.php:102
+#: pandabot/public/class-pandabot-widget.php:103
 msgid "הסתרת ההודעה"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:122
+#: pandabot/public/class-pandabot-widget.php:123
 msgid "סגירת הצ'אט"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:143
+#: pandabot/public/class-pandabot-widget.php:144
 msgid "מדיניות פרטיות"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:153
+#: pandabot/public/class-pandabot-widget.php:154
 #: pandabot/admin/views/knowledge.php:197
 msgid "כתבו שאלה…"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:154
+#: pandabot/public/class-pandabot-widget.php:155
 msgid "הקלדת הודעה"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:155
+#: pandabot/public/class-pandabot-widget.php:156
 #: pandabot/admin/views/knowledge.php:198
 msgid "שליחה"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:162
+#: pandabot/public/class-pandabot-widget.php:163
 msgid "מקלידה…"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:179
+#: pandabot/public/class-pandabot-widget.php:180
 msgid "לתיאום שיחת היכרות"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:186
+#: pandabot/public/class-pandabot-widget.php:187
 msgid "התקשרו"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:192
+#: pandabot/public/class-pandabot-widget.php:193
 msgid "וואטסאפ"
 msgstr ""
 
@@ -1073,9 +1073,13 @@ msgid "ראה מקור"
 msgstr ""
 
 #: pandabot/public/class-pandabot-widget.php:91
+msgid "מהשאלות הנפוצות"
+msgstr ""
+
+#: pandabot/public/class-pandabot-widget.php:92
 msgid "מקור %d — הצגת הציטוט"
 msgstr ""
 
-#: pandabot/public/class-pandabot-widget.php:95
+#: pandabot/public/class-pandabot-widget.php:96
 msgid "פתיחת צ'אט"
 msgstr ""

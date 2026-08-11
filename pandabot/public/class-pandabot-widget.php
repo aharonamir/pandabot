@@ -88,6 +88,7 @@ class Pandabot_Widget {
 			data-error-text="<?php echo esc_attr( $settings['generic_error_message'] ); ?>"
 			data-sources-label="<?php esc_attr_e( 'מקורות', 'pandabot' ); ?>"
 			data-source-link="<?php esc_attr_e( 'ראה מקור', 'pandabot' ); ?>"
+			data-source-faq="<?php esc_attr_e( 'מהשאלות הנפוצות', 'pandabot' ); ?>"
 			data-source-aria="<?php esc_attr_e( 'מקור %d — הצגת הציטוט', 'pandabot' ); ?>"
 			data-auto-open="<?php echo esc_attr( (int) $ui['auto_open_delay'] ); ?>">
 

@@ -3,7 +3,7 @@
  * Plugin Name:       PandaBot
  * Plugin URI:        https://pandakids-clinic.co.il/
  * Description:       Self-hosted RAG chatbot for the clinic site — answers from site content, books calls, never gives medical advice.
- * Version:           1.2.1
+ * Version:           1.2.2
  * Requires at least: 5.8
  * Requires PHP:      7.4
  * Author:            Panda Kids Clinic
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // No direct access.
 }
 
-define( 'PANDABOT_VERSION', '1.2.1' );
+define( 'PANDABOT_VERSION', '1.2.2' );
 define( 'PANDABOT_DB_VERSION', '1' );
 define( 'PANDABOT_PLUGIN_FILE', __FILE__ );
 define( 'PANDABOT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );

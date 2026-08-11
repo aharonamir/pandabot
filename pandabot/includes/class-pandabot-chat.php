@@ -176,7 +176,7 @@ class Pandabot_Chat {
 	 */
 	/**
 	 * Turn the chunks that actually fed the prompt into citation entries for
-	 * the widget: one per source page, best-scoring chunk first.
+	 * the widget: one per source, best-scoring chunk first.
 	 *
 	 * Callers must only use this when the answer was genuinely grounded in
 	 * these chunks (guardrail_action === 'none'). A fallback or a medical
@@ -185,39 +185,60 @@ class Pandabot_Chat {
 	 * authority for a non-answer, which on a clinical site is worse than
 	 * showing no sources at all.
 	 *
-	 * @return array<int, array{title:string, url:string, excerpt:string}>
+	 * Manual Q&A entries are cited too, even though they have no URL to link
+	 * to. Skipping them would misattribute a mixed answer: one manual entry
+	 * plus one page would show a single chip pointing at the page, telling the
+	 * visitor the whole answer came from there.
+	 *
+	 * @return array<int, array{title:string, url:string, excerpt:string, kind:string}>
 	 */
 	public static function sources_from( array $chunks, $limit = 3 ) {
-		$by_url = array();
+		$sources = array();
 
 		foreach ( $chunks as $chunk ) {
-			$url = isset( $chunk['source_url'] ) ? trim( (string) $chunk['source_url'] ) : '';
-			if ( '' === $url ) {
-				continue;
-			}
-			// Chunks arrive similarity-ordered, so the first hit for a page is
-			// its best one — several chunks from one page collapse to a single
-			// citation rather than three chips pointing at the same URL.
-			if ( isset( $by_url[ $url ] ) ) {
+			$type    = isset( $chunk['source_type'] ) ? (string) $chunk['source_type'] : 'post';
+			$title   = isset( $chunk['title'] ) ? trim( (string) $chunk['title'] ) : '';
+			$url     = isset( $chunk['source_url'] ) ? trim( (string) $chunk['source_url'] ) : '';
+			$content = isset( $chunk['content'] ) ? (string) $chunk['content'] : '';
+
+			if ( '' === $title && '' === $content ) {
 				continue;
 			}
 
-			$title = isset( $chunk['title'] ) ? trim( (string) $chunk['title'] ) : '';
+			// Keyed on the source rather than the URL: every manual entry has
+			// an empty URL, so a URL key would collapse all of them into one
+			// citation. Chunks arrive similarity-ordered, so the first hit for
+			// a source is its best one.
+			$key = $type . ':' . ( isset( $chunk['source_id'] ) ? (int) $chunk['source_id'] : 0 );
+			if ( isset( $sources[ $key ] ) ) {
+				continue;
+			}
 
-			$by_url[ $url ] = array(
-				'title'   => ( '' !== $title ) ? $title : $url,
-				'url'     => $url,
+			if ( 'manual' === $type ) {
+				// index_manual_entry() stores "question\n\nanswer" and sets the
+				// title to the question, so excerpting from the top would print
+				// the question twice in one tooltip.
+				$parts   = preg_split( "/\r?\n\r?\n/", $content, 2 );
+				$content = ( isset( $parts[1] ) && '' !== trim( $parts[1] ) ) ? $parts[1] : $content;
+			}
+
+			$sources[ $key ] = array(
+				'title' => ( '' !== $title ) ? $title : $url,
+				'url'   => $url,
 				// Chunks run to a couple of thousand characters; a tooltip
 				// needs a taste, and the link covers the rest.
-				'excerpt' => wp_html_excerpt( (string) $chunk['content'], 200, '…' ),
+				'excerpt' => wp_html_excerpt( $content, 200, '…' ),
+				// Explicit rather than inferred from an empty URL: a page whose
+				// URL went missing would otherwise be labelled as an FAQ entry.
+				'kind'    => ( 'manual' === $type ) ? 'manual' : 'page',
 			);
 
-			if ( count( $by_url ) >= $limit ) {
+			if ( count( $sources ) >= $limit ) {
 				break;
 			}
 		}
 
-		return array_values( $by_url );
+		return array_values( $sources );
 	}
 
 	private function build_messages( array $settings, $context, $user_message ) {

@@ -19,6 +19,7 @@
 	var errorText = root.getAttribute('data-error-text');
 	var sourcesLabel = root.getAttribute('data-sources-label');
 	var sourceLinkText = root.getAttribute('data-source-link');
+	var sourceFaqText = root.getAttribute('data-source-faq');
 	var sourceAria = root.getAttribute('data-source-aria');
 	var autoOpen = parseInt(root.getAttribute('data-auto-open'), 10) || 0;
 
@@ -198,6 +199,13 @@
 				link.rel = 'noopener';
 				link.textContent = sourceLinkText;
 				tip.appendChild(link);
+			} else if (source.kind === 'manual') {
+				// A manual Q&A entry has no page to open, so say what it is
+				// rather than leaving an unexplained gap where the link sits.
+				var kind = document.createElement('span');
+				kind.className = 'pandabot-source-kind';
+				kind.textContent = sourceFaqText;
+				tip.appendChild(kind);
 			}
 
 			function setOpen(open) {
