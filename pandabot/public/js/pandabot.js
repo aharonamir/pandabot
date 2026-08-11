@@ -28,6 +28,7 @@
 	var openBtns = root.querySelectorAll('[data-pandabot="open"]');
 	var teaser = root.querySelector('[data-pandabot="teaser"]');
 	var teaserClose = root.querySelector('[data-pandabot="dismiss-teaser"]');
+	var launcherClose = root.querySelector('[data-pandabot="dismiss-launcher"]');
 	var closeBtn = root.querySelector('[data-pandabot="close"]');
 	var body = root.querySelector('[data-pandabot="body"]');
 	var chips = root.querySelector('[data-pandabot="chips"]');
@@ -51,6 +52,7 @@
 	var TX_KEY = 'pandabot_transcript';
 	var OPENED_KEY = 'pandabot_opened';
 	var TEASER_KEY = 'pandabot_teaser_dismissed';
+	var LAUNCHER_KEY = 'pandabot_launcher_dismissed';
 
 	function store(key, value) {
 		try {
@@ -368,6 +370,58 @@
 	if (teaser && read(TEASER_KEY)) {
 		teaser.hidden = true;
 	}
+
+	/* ---------- launcher: dismiss, and get out of the way while scrolling ---------- */
+
+	// A class on the root, not launcher.hidden — closePanel() sets that back to
+	// false on the way out, which would resurrect a launcher the visitor
+	// deliberately dismissed.
+	function dismissLauncher() {
+		root.classList.add('pandabot--dismissed');
+		store(LAUNCHER_KEY, '1');
+	}
+
+	if (launcherClose) {
+		launcherClose.addEventListener('click', dismissLauncher);
+	}
+
+	if (read(LAUNCHER_KEY)) {
+		root.classList.add('pandabot--dismissed');
+	}
+
+	// Phones only: on a desktop the launcher costs no real screen space, and
+	// motion there is a distraction rather than a fix.
+	var phone = window.matchMedia('(max-width: 480px)');
+	var lastScrollY = window.pageYOffset;
+	var scrollIdleTimer = null;
+
+	window.addEventListener('scroll', function () {
+		if (!phone.matches) {
+			return;
+		}
+
+		var y = window.pageYOffset;
+		var delta = y - lastScrollY;
+
+		// Ignore jitter and the elastic overscroll at the very top, which
+		// would otherwise flicker the launcher on every small touch.
+		if (Math.abs(delta) < 6) {
+			return;
+		}
+		lastScrollY = y;
+
+		if (delta > 0 && y > 120) {
+			launcher.classList.add('is-tucked');
+		} else {
+			launcher.classList.remove('is-tucked');
+		}
+
+		// Reading, not scrolling: bring it back so it is there when wanted.
+		window.clearTimeout(scrollIdleTimer);
+		scrollIdleTimer = window.setTimeout(function () {
+			launcher.classList.remove('is-tucked');
+		}, 700);
+	}, { passive: true });
 
 	document.addEventListener('keydown', function (e) {
 		if (e.key !== 'Escape') {

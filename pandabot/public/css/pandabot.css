@@ -73,6 +73,7 @@
 	align-items: center;
 	gap: 12px;
 	flex-direction: row-reverse;
+	transition: transform .25s ease, opacity .25s ease;
 }
 
 #pandabot-root.pandabot--left .pandabot-launcher {
@@ -82,6 +83,36 @@
 #pandabot-root.pandabot--right .pandabot-launcher {
 	right: var(--pandabot-offset-side);
 	flex-direction: row;
+}
+
+#pandabot-root .pandabot-launcher-wrap {
+	position: relative;
+	display: inline-flex;
+}
+
+/* Hidden by default: revealed only under the small-screen media query. */
+#pandabot-root .pandabot-launcher-close {
+	display: none;
+	position: absolute;
+	top: -2px;
+	inset-inline-end: -2px;
+	width: 22px;
+	height: 22px;
+	padding: 0;
+	border-radius: 50%;
+	border: 1px solid var(--pandabot-line);
+	background: #fff;
+	color: var(--pandabot-muted);
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 1px 4px rgba(16, 40, 34, .18);
+	z-index: 1;
+}
+
+#pandabot-root .pandabot-launcher-close .pandabot-icon {
+	width: 12px;
+	height: 12px;
 }
 
 #pandabot-root .pandabot-launcher-btn {
@@ -588,6 +619,27 @@
 /* ---------- Small screens: the panel takes the viewport ---------- */
 
 @media (max-width: 480px) {
+	#pandabot-root .pandabot-launcher-close {
+		display: inline-flex;
+	}
+
+	/* Pushed clear of the viewport rather than display:none — a hidden
+	   element cannot transition, and it would reappear with a jump. */
+	#pandabot-root .pandabot-launcher.is-tucked {
+		transform: translateY(calc(100% + var(--pandabot-offset-bottom)));
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+/* Dismissed for the session. Separate from the [hidden] the panel toggles,
+   which closePanel() would otherwise undo on the way out. */
+#pandabot-root.pandabot--dismissed .pandabot-launcher {
+	display: none !important;
+}
+
+
+@media (max-width: 480px) {
 	#pandabot-root .pandabot-panel {
 		width: auto;
 		height: auto;
@@ -856,4 +908,14 @@
 #pandabot-root .pandabot-source-link {
 	color: var(--pandabot-accent) !important;
 	text-decoration: underline !important;
+}
+
+#pandabot-root .pandabot-launcher-close {
+	background: #fff !important;
+	color: var(--pandabot-muted) !important;
+	border: 1px solid var(--pandabot-line) !important;
+	border-radius: 50% !important;
+	width: 22px !important;
+	height: 22px !important;
+	padding: 0 !important;
 }

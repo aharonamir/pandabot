@@ -93,10 +93,16 @@ class Pandabot_Widget {
 			data-auto-open="<?php echo esc_attr( (int) $ui['auto_open_delay'] ); ?>">
 
 			<div class="pandabot-launcher" data-pandabot="launcher">
-				<button type="button" class="pandabot-launcher-btn" data-pandabot="open" aria-expanded="false" aria-controls="pandabot-panel" aria-label="<?php esc_attr_e( 'פתיחת צ\'אט', 'pandabot' ); ?>">
-					<?php echo self::icon( $ui['launcher_icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?>
-					<span class="pandabot-badge" aria-hidden="true">1</span>
-				</button>
+				<div class="pandabot-launcher-wrap">
+					<button type="button" class="pandabot-launcher-btn" data-pandabot="open" aria-expanded="false" aria-controls="pandabot-panel" aria-label="<?php esc_attr_e( 'פתיחת צ\'אט', 'pandabot' ); ?>">
+						<?php echo self::icon( $ui['launcher_icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?>
+						<span class="pandabot-badge" aria-hidden="true">1</span>
+					</button>
+					<?php // Only rendered visible on phones (see the CSS media query) — on desktop the launcher costs no meaningful screen space. ?>
+					<button type="button" class="pandabot-launcher-close" data-pandabot="dismiss-launcher" aria-label="<?php esc_attr_e( 'הסתרת כפתור הצ\'אט', 'pandabot' ); ?>">
+						<?php echo self::icon( 'x' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?>
+					</button>
+				</div>
 				<?php if ( '' !== trim( $ui['teaser_text'] ) ) : ?>
 					<div class="pandabot-teaser" data-pandabot="teaser">
 						<button type="button" class="pandabot-teaser-text" data-pandabot="open"><?php echo esc_html( $ui['teaser_text'] ); ?></button>

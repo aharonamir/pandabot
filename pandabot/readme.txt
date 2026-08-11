@@ -4,7 +4,7 @@ Tags: chatbot, rag, hebrew, openai, chat
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,13 @@ clock, so a quiet site can lag by hours. You can run it by hand from Settings,
 or point a real cron job at `wp-cron.php`.
 
 == Changelog ==
+
+= 1.2.3 =
+* On phones the floating button now slides out of the way while you scroll
+  down and returns when you stop or scroll up, and carries a small dismiss
+  button to hide it for the rest of the session. Desktop is unchanged.
+* Corrected the Hebrew label for the rate-limit message setting, which implied
+  provider overload rather than the plugin's own request caps.
 
 = 1.2.2 =
 * Manual Q&A entries are now cited like any other source, labelled
