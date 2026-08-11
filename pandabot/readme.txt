@@ -4,7 +4,7 @@ Tags: chatbot, rag, hebrew, openai, chat
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,14 @@ clock, so a quiet site can lag by hours. You can run it by hand from Settings,
 or point a real cron job at `wp-cron.php`.
 
 == Changelog ==
+
+= 1.3.0 =
+* Rate-limit windows are now fixed rather than rolling. Each write used to
+  restart the window's expiry, so a visitor asking a question every few minutes
+  kept their hourly counter alive indefinitely — "40 per hour" became "40 ever,
+  until you stop for a full hour". The hour bucket now resets on the hour.
+* New "Clear rate-limit counters" button in Settings, which unblocks everyone
+  immediately.
 
 = 1.2.3 =
 * On phones the floating button now slides out of the way while you scroll

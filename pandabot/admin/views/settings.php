@@ -74,6 +74,10 @@ $notice_n = isset( $_GET['pandabot_n'] ) ? (int) $_GET['pandabot_n'] : 0;
 				?>
 			</p>
 		</div>
+	<?php elseif ( 'rl_reset' === $notice ) : ?>
+		<div class="notice notice-success is-dismissible">
+			<p><?php esc_html_e( 'Rate-limit counters cleared. Everyone currently blocked can ask again immediately.', 'pandabot' ); ?></p>
+		</div>
 	<?php elseif ( 'unconfirmed' === $notice ) : ?>
 		<div class="notice notice-warning is-dismissible">
 			<p><?php esc_html_e( 'Nothing was deleted — you need to tick the confirmation box first.', 'pandabot' ); ?></p>
@@ -455,6 +459,18 @@ $notice_n = isset( $_GET['pandabot_n'] ) ? (int) $_GET['pandabot_n'] : 0;
 	</div>
 
 	<div class="pandabot-card">
+		<h2><?php esc_html_e( 'Rate limiting', 'pandabot' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Counters are kept per visitor IP, in fixed windows that reset on the minute, the hour and the day. Clearing them unblocks everyone at once — useful while testing, since your own phone and computer share one home IP and a private browsing window does not change it.', 'pandabot' ); ?>
+		</p>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'pandabot_reset_ratelimits' ); ?>
+			<input type="hidden" name="action" value="pandabot_reset_ratelimits">
+			<button type="submit" class="button"><?php esc_html_e( 'Clear rate-limit counters', 'pandabot' ); ?></button>
+		</form>
+	</div>
+
+	<div class="pandabot-card">
 		<h2><?php esc_html_e( 'Stored data', 'pandabot' ); ?></h2>
 
 		<table class="pandabot-kv">
@@ -516,7 +532,7 @@ $notice_n = isset( $_GET['pandabot_n'] ) ? (int) $_GET['pandabot_n'] : 0;
 
 		<h3><?php esc_html_e( 'IP hashing salt', 'pandabot' ); ?></h3>
 		<p class="description">
-			<?php esc_html_e( 'Rate limiting counts requests per visitor without ever storing an IP: the address is hashed with a secret salt held only in this database. Regenerating the salt permanently severs any link between stored hashes and a visitor — useful after a data-access request, or if the database was ever exposed. It also resets everyone\'s current rate-limit counters.', 'pandabot' ); ?>
+			<?php esc_html_e( 'Rate limiting counts requests per visitor without ever storing an IP: the address is hashed with a secret salt held only in this database. Regenerating the salt permanently severs any link between stored hashes and a visitor — useful after a data-access request, or if the database was ever exposed. It clears the rate-limit counters as a side effect — if that is all you want, use "Clear rate-limit counters" above instead.', 'pandabot' ); ?>
 		</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<?php wp_nonce_field( 'pandabot_regenerate_salt' ); ?>

@@ -47,6 +47,7 @@ $options = array(
 	'pandabot_activated_at',
 	'pandabot_manual_qa_next_id',
 	'pandabot_last_purge_at',
+	'pandabot_rl_epoch',
 );
 
 foreach ( $options as $option ) {

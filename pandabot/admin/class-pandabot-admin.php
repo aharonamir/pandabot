@@ -20,6 +20,7 @@ class Pandabot_Admin {
 		add_action( 'admin_post_pandabot_regenerate_salt', array( $this, 'handle_regenerate_salt' ) );
 		add_action( 'admin_post_pandabot_purge_now', array( $this, 'handle_purge_now' ) );
 		add_action( 'admin_post_pandabot_delete_all_logs', array( $this, 'handle_delete_all_logs' ) );
+		add_action( 'admin_post_pandabot_reset_ratelimits', array( $this, 'handle_reset_ratelimits' ) );
 	}
 
 	public function register_menu() {
@@ -151,6 +152,14 @@ class Pandabot_Admin {
 				'pandabot_n'      => (int) $deleted['conversations'],
 			)
 		);
+	}
+
+	public function handle_reset_ratelimits() {
+		$this->guard( 'pandabot_reset_ratelimits' );
+
+		Pandabot_Ratelimit::reset_counters();
+
+		$this->redirect_to_settings( array( 'pandabot_notice' => 'rl_reset' ) );
 	}
 
 	private function guard( $nonce_action ) {
