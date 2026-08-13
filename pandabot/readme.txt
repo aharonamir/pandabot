@@ -4,7 +4,7 @@ Tags: chatbot, rag, hebrew, openai, chat
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,12 @@ clock, so a quiet site can lag by hours. You can run it by hand from Settings,
 or point a real cron job at `wp-cron.php`.
 
 == Changelog ==
+
+= 1.3.2 =
+* Dismissing the floating button on a phone now lasts for the current page
+  only. It used to persist for the whole browser tab, so refreshing or moving
+  to another page did not bring it back and the only way to restore it was to
+  close the tab entirely.
 
 = 1.3.1 =
 * Fixed the widget failing with the generic error message on cached pages. The

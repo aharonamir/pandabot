@@ -52,7 +52,6 @@
 	var TX_KEY = 'pandabot_transcript';
 	var OPENED_KEY = 'pandabot_opened';
 	var TEASER_KEY = 'pandabot_teaser_dismissed';
-	var LAUNCHER_KEY = 'pandabot_launcher_dismissed';
 
 	function store(key, value) {
 		try {
@@ -429,17 +428,19 @@
 	// A class on the root, not launcher.hidden — closePanel() sets that back to
 	// false on the way out, which would resurrect a launcher the visitor
 	// deliberately dismissed.
+	//
+	// Deliberately NOT persisted. This used to write to sessionStorage, which
+	// survives reloads and navigation and clears only when the tab closes — so
+	// a visitor who dismissed the button had no way to bring it back, and the
+	// first thing anyone tries, refreshing, did nothing. Scoping it to the page
+	// view makes refresh the way back, and the scroll-tuck below already covers
+	// the reason the dismiss exists: not losing screen space while reading.
 	function dismissLauncher() {
 		root.classList.add('pandabot--dismissed');
-		store(LAUNCHER_KEY, '1');
 	}
 
 	if (launcherClose) {
 		launcherClose.addEventListener('click', dismissLauncher);
-	}
-
-	if (read(LAUNCHER_KEY)) {
-		root.classList.add('pandabot--dismissed');
 	}
 
 	// Phones only: on a desktop the launcher costs no real screen space, and
