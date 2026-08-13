@@ -160,6 +160,31 @@ class Pandabot_Rest {
 			)
 		);
 
+		// Hands the widget a fresh nonce when the one baked into the page has
+		// expired. This exists because a page cache (LiteSpeed on this host)
+		// serves HTML for far longer than a nonce lives: a visitor loading a
+		// 23-hour-old cached page gets a dead nonce, 403 on /chat, and the
+		// generic error message forever — reloading cannot help, since the
+		// reload comes from the same cache.
+		//
+		// Origin-checked but obviously NOT nonce-checked, which costs nothing:
+		// the nonce it returns was already free to anyone who could fetch the
+		// public page it was rendered into. It is a bot speedbump for an
+		// endpoint with no authenticated user, not a CSRF token.
+		//
+		// POST rather than GET on purpose — LiteSpeed and friends can be
+		// configured to cache REST GETs, which would reinstate the exact bug
+		// this route exists to fix.
+		register_rest_route(
+			self::NAMESPACE_,
+			'/nonce',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( $this, 'public_nonce' ),
+				'permission_callback' => array( $this, 'public_origin_permission' ),
+			)
+		);
+
 		// Widget analytics (plan §8 funnel). Same origin+nonce gate as /chat;
 		// event_type is validated against a fixed whitelist so the client can
 		// only ever write event names the dashboard already knows about.
@@ -210,6 +235,34 @@ class Pandabot_Rest {
 		( new Pandabot_Logger() )->log_event( $session_id, $request->get_param( 'event_type' ) );
 
 		return new WP_REST_Response( array( 'success' => true ), 200 );
+	}
+
+	/**
+	 * Origin check only — the gate for /nonce, which by definition cannot
+	 * require the thing it hands out.
+	 */
+	public function public_origin_permission( WP_REST_Request $request ) {
+		if ( ! $this->origin_allowed( $request ) ) {
+			return new WP_Error( 'pandabot_forbidden', __( 'Forbidden.', 'pandabot' ), array( 'status' => 403 ) );
+		}
+		return true;
+	}
+
+	/**
+	 * A freshly minted public-chat nonce. nocache_headers() so no proxy or
+	 * page cache between here and the visitor can store it — a cached nonce
+	 * is the problem this route solves, not something to reintroduce.
+	 */
+	public function public_nonce() {
+		nocache_headers();
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'nonce'   => wp_create_nonce( Pandabot_Widget::NONCE_ACTION ),
+			),
+			200
+		);
 	}
 
 	public function public_chat_permission( WP_REST_Request $request ) {

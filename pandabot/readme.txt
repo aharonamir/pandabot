@@ -4,7 +4,7 @@ Tags: chatbot, rag, hebrew, openai, chat
 Requires at least: 5.8
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,14 @@ clock, so a quiet site can lag by hours. You can run it by hand from Settings,
 or point a real cron job at `wp-cron.php`.
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed the widget failing with the generic error message on cached pages. The
+  security nonce is rendered into the page HTML and lives about 24 hours, but a
+  page cache can serve the same HTML for longer — every visitor on that stale
+  page then got a 403 and an error, and reloading could not help because the
+  reload came from the same cache. The widget now fetches a fresh nonce and
+  retries once, so it recovers on its own.
 
 = 1.3.0 =
 * Rate-limit windows are now fixed rather than rolling. Each write used to

@@ -299,7 +299,7 @@
 
 	/* ---------- REST ---------- */
 
-	function post(route, payload, keepalive) {
+	function rawPost(route, payload, keepalive) {
 		return fetch(restUrl + route, {
 			method: 'POST',
 			credentials: 'same-origin',
@@ -309,6 +309,59 @@
 				'X-PandaBot-Nonce': nonce
 			},
 			body: JSON.stringify(payload)
+		});
+	}
+
+	// One in-flight refresh at a time: several fire-and-forget events can hit
+	// a dead nonce at once, and they should share one round trip rather than
+	// each mint their own.
+	var nonceRefresh = null;
+
+	function refreshNonce() {
+		if (!nonceRefresh) {
+			nonceRefresh = fetch(restUrl + 'nonce', {
+				method: 'POST',
+				credentials: 'same-origin',
+				headers: { 'Content-Type': 'application/json' },
+				body: '{}'
+			})
+				.then(function (res) {
+					return res.ok ? res.json() : null;
+				})
+				.then(function (data) {
+					if (data && data.nonce) {
+						nonce = data.nonce;
+						return true;
+					}
+					return false;
+				})
+				.catch(function () {
+					return false;
+				})
+				.then(function (ok) {
+					nonceRefresh = null;
+					return ok;
+				});
+		}
+		return nonceRefresh;
+	}
+
+	/**
+	 * A 403 here almost always means the nonce rendered into the page has
+	 * expired — either a page cache served HTML older than the nonce lifetime
+	 * (~24h), or this tab has simply been open that long. Both are invisible
+	 * to the visitor and unfixable by reloading a cached page, so fetch a
+	 * fresh nonce and retry once rather than showing an error. Exactly one
+	 * retry: if the second attempt still fails, it is not the nonce.
+	 */
+	function post(route, payload, keepalive) {
+		return rawPost(route, payload, keepalive).then(function (res) {
+			if (res.status !== 403) {
+				return res;
+			}
+			return refreshNonce().then(function (ok) {
+				return ok ? rawPost(route, payload, keepalive) : res;
+			});
 		});
 	}
 
