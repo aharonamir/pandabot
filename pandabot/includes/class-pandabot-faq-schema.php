@@ -10,6 +10,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  * rather than its own save_post hook, so it shares that method's publish/
  * post-type/exclusion guard instead of duplicating it. This class only owns
  * its own hooks for the per-post opt-out checkbox and the wp_head output.
+ *
+ * KNOWN ISSUE (unresolved): the stored _pandabot_faq_schema value has been
+ * observed on production with unescaped `"` inside Hebrew string values —
+ * invalid JSON — despite maybe_generate_for_post() building it through a
+ * single wp_json_encode() call on the whole structure, which passed
+ * extensive local testing (including headings/answers containing literal
+ * `"` characters) without ever reproducing the corruption. Root cause is
+ * unconfirmed; leading theory is a server-side filter or security
+ * plugin/WAF touching the postmeta write on that specific host, not this
+ * generation code. Currently mitigated only by avoiding literal `"`
+ * characters in FAQ post content. This is an open SEO-schema bug — it does
+ * NOT affect chatbot retrieval accuracy, since Pandabot_Indexer's
+ * FAQ-aware chunking re-derives pairs from post_content directly rather
+ * than reading this postmeta (see Pandabot_Indexer::faq_aware_chunks()).
  */
 class Pandabot_Faq_Schema {
 
@@ -58,6 +72,60 @@ class Pandabot_Faq_Schema {
 		if ( ! $disabled && get_post_meta( $post->ID, self::META_SCHEMA, true ) ) {
 			echo '<p class="description">' . esc_html__( 'FAQ schema is currently generated for this post.', 'pandabot' ) . '</p>';
 		}
+
+		$this->render_debug_raw_postmeta( $post );
+	}
+
+	/**
+	 * TEMPORARY DIAGNOSTIC — added to inspect the raw _pandabot_faq_schema
+	 * postmeta value from wp-admin (no shell/WP-CLI access available while
+	 * debugging the FAQPage JSON-LD corruption on the live site). Shows the
+	 * exact stored string, untouched, plus a json_decode() validity check
+	 * against that same raw value — nothing here re-encodes or reformats it.
+	 *
+	 * Remove this method and its call site once the corruption question is
+	 * resolved — it has no reason to exist outside this investigation.
+	 */
+	private function render_debug_raw_postmeta( $post ) {
+		$raw = get_post_meta( $post->ID, self::META_SCHEMA, true );
+
+		echo '<hr />';
+		echo '<p><strong>' . esc_html__( 'DEBUG (temporary): raw _pandabot_faq_schema', 'pandabot' ) . '</strong></p>';
+
+		if ( $raw ) {
+			json_decode( $raw );
+			$json_error = json_last_error();
+
+			if ( JSON_ERROR_NONE === $json_error ) {
+				echo '<p style="color:green;">' . esc_html__( 'Valid JSON', 'pandabot' ) . '</p>';
+			} else {
+				echo '<p style="color:red;">' . esc_html( 'INVALID JSON: ' . json_last_error_msg() ) . '</p>';
+			}
+
+			echo '<textarea readonly rows="10" style="width:100%;direction:ltr;font-family:monospace;font-size:11px;">' . esc_textarea( $raw ) . '</textarea>';
+		} else {
+			echo '<p>' . esc_html__( '(no schema currently stored)', 'pandabot' ) . '</p>';
+		}
+
+		// Diagnostic: does the hash guard explain a stuck/stale value? If the
+		// freshly-computed hash already matches the stored one, a normal
+		// re-save will skip regeneration entirely (by design) — so a broken
+		// stored value written by something other than this code would
+		// survive re-saves indefinitely unless that guard is bypassed.
+		$pairs         = self::extract_qa_pairs( $post->post_content );
+		$fresh_hash    = ( count( $pairs ) >= self::MIN_PAIRS ) ? sha1( wp_json_encode( $pairs ) ) : '(fewer than ' . self::MIN_PAIRS . ' pairs — would not generate)';
+		$stored_hash   = get_post_meta( $post->ID, self::META_HASH, true );
+		$stored_hash   = $stored_hash ? $stored_hash : '(none stored)';
+		echo '<p style="font-size:11px;color:#666;">' . esc_html( 'stored hash: ' . $stored_hash ) . '<br />' . esc_html( 'fresh hash: ' . $fresh_hash ) . '</p>';
+
+		?>
+		<p>
+			<label>
+				<input type="checkbox" name="pandabot_faq_force_regen" value="1" />
+				<?php esc_html_e( 'Force regenerate on save (clears stored schema/hash first, bypassing the unchanged-content guard)', 'pandabot' ); ?>
+			</label>
+		</p>
+		<?php
 	}
 
 	public function save_meta_box( $post_id ) {
@@ -76,6 +144,15 @@ class Pandabot_Faq_Schema {
 			update_post_meta( $post_id, self::META_DISABLED, 1 );
 		} else {
 			delete_post_meta( $post_id, self::META_DISABLED );
+		}
+
+		// TEMPORARY DIAGNOSTIC — see render_debug_raw_postmeta(). Runs at the
+		// default save_post priority (10), before Pandabot_Indexer's
+		// on_save_post (priority 20) calls maybe_generate_for_post(), so
+		// clearing here guarantees the guard sees no stored hash and
+		// regenerates unconditionally on this same save.
+		if ( ! empty( $_POST['pandabot_faq_force_regen'] ) ) {
+			self::clear_schema( $post_id );
 		}
 	}
 

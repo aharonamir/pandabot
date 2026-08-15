@@ -86,8 +86,11 @@ class Pandabot_Indexer {
 			);
 		}
 
-		$clean  = Pandabot_Chunker::clean_html( $post->post_content );
-		$chunks = Pandabot_Chunker::chunk_text( $clean );
+		$chunks = $this->faq_aware_chunks( $post );
+		if ( null === $chunks ) {
+			$clean  = Pandabot_Chunker::clean_html( $post->post_content );
+			$chunks = Pandabot_Chunker::chunk_text( $clean );
+		}
 
 		return $this->sync_source(
 			'page' === $post->post_type ? 'page' : 'post',
@@ -95,6 +98,38 @@ class Pandabot_Indexer {
 			(string) get_permalink( $post_id ),
 			(string) get_the_title( $post_id ),
 			$chunks
+		);
+	}
+
+	/**
+	 * For FAQ-style posts (H2-question / paragraph-answer pattern, same
+	 * detection as Pandabot_Faq_Schema), one chunk per Question/Answer pair
+	 * instead of token-window chunking — keeps each Q&A intact for
+	 * retrieval rather than letting it get split mid-answer or merged with
+	 * a neighboring pair.
+	 *
+	 * Deliberately re-derives pairs from post_content via
+	 * Pandabot_Faq_Schema::extract_qa_pairs() rather than reading the
+	 * stored _pandabot_faq_schema postmeta, so retrieval accuracy never
+	 * depends on that postmeta write having succeeded (see the known-issue
+	 * note on Pandabot_Faq_Schema — its JSON-LD output can be corrupted in
+	 * production independently of this).
+	 *
+	 * @return string[]|null Null = not FAQ-style, caller falls back to
+	 *                        normal token-window chunking.
+	 */
+	private function faq_aware_chunks( WP_Post $post ) {
+		$pairs = Pandabot_Faq_Schema::extract_qa_pairs( $post->post_content );
+
+		if ( count( $pairs ) < Pandabot_Faq_Schema::MIN_PAIRS ) {
+			return null;
+		}
+
+		return array_map(
+			function ( $pair ) {
+				return trim( $pair['question'] . "\n\n" . $pair['answer'] );
+			},
+			$pairs
 		);
 	}
 

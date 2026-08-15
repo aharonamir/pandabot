@@ -23,6 +23,13 @@ class Pandabot_Chunker {
 	/**
 	 * Render blocks/shortcodes, strip tags, decode entities, collapse
 	 * whitespace while preserving paragraph breaks.
+	 *
+	 * Known minor noise source (not a correctness bug, not fixed here):
+	 * Elementor-built pages (decorative icon-box/spacer/stat-counter
+	 * widgets) leave behind blank or non-breaking-space-only lines that
+	 * this doesn't fully collapse — no markup/attributes leak through,
+	 * just extra whitespace in the embedded text. Worth revisiting only if
+	 * retrieval quality on Elementor pages ever seems affected by it.
 	 */
 	public static function clean_html( $html ) {
 		$html = is_string( $html ) ? $html : '';
