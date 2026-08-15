@@ -51,6 +51,7 @@ require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-provider.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-chunker.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-embeddings.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-indexer.php';
+require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-faq-schema.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-retriever.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-logger.php';
 require_once PANDABOT_PLUGIN_DIR . 'includes/class-pandabot-analytics.php';

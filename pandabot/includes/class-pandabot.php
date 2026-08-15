@@ -20,6 +20,9 @@ final class Pandabot {
 	/** @var Pandabot_Indexer */
 	public $indexer = null;
 
+	/** @var Pandabot_Faq_Schema */
+	public $faq_schema = null;
+
 	/** @var Pandabot_Widget */
 	public $widget = null;
 
@@ -43,6 +46,9 @@ final class Pandabot {
 
 		$this->indexer = new Pandabot_Indexer();
 		$this->indexer->init();
+
+		$this->faq_schema = new Pandabot_Faq_Schema();
+		$this->faq_schema->init();
 
 		$this->widget = new Pandabot_Widget();
 		$this->widget->init();

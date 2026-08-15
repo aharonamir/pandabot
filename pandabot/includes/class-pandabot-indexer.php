@@ -48,6 +48,7 @@ class Pandabot_Indexer {
 		}
 
 		$this->index_post( $post_id );
+		Pandabot_Faq_Schema::maybe_generate_for_post( $post_id, $post );
 	}
 
 	public function on_delete_post( $post_id ) {
